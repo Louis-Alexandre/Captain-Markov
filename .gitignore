@@ -1,0 +1,17 @@
+.svn 
+.svn/ 
+build/ 
+*.kdev4 
+*~ 
+.* 
+Thumbs.db 
+*.pdn 
+!/.gitignore 
+CMakeCache.txt 
+CMakeFiles/ 
+Makefile 
+cmake_install.cmake 
+compile_commands.json 
+golem 
+nbproject/ 
+*.orig
