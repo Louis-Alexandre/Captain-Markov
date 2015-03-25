@@ -11,9 +11,8 @@ Pathfinding::Pathfinding()
 }
 
 int Pathfinding::getCostG(shared_ptr<Tile> tile1, shared_ptr<Tile> tile2) const
-{nst
 {
-	return costG + costH;>getPosition() - tile1->getPosition();
+	auto relative = tile2->getPosition() - tile1->getPosition();
 	return sqrt((relative.x*relative.x)+(relative.y*relative.y));
 }
 
@@ -29,7 +28,9 @@ void Pathfinding::setGoal(shared_ptr< Tile > goal)
 }
 
 
-double Pathfinding::calculateSumOfGH(int costG, double costH) co
+double Pathfinding::calculateSumOfGH(int costG, double costH) const
+{
+	return costG + costH;
 }
 
 void Pathfinding::addToCloseList(shared_ptr<Tile> tile)
