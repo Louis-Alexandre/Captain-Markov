@@ -17,15 +17,15 @@ public:
 	int getTileHeight() const;
 	void setTileWidth(int tileWidth);
 	int getTileWidth() const;
-// 	void setHeuristic();
-// 	void getHeuristic() const;
+ 	double getHeuristic();
+ 	void setHeuristic(double probabiliter);
 	
 	
 
 private:
 	//type goal
 	std::shared_ptr<TileType> tileType;
-	int heuristic;
+	double heuristic;
 	int tileWidth;
 	int tileHeight;
 	sf::Vector2i position;
