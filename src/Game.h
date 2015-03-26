@@ -9,6 +9,7 @@ class Goal;
 class Map;
 class Entity;
 class CollisionHandler;
+class Event;
 
 class Game
 {
@@ -33,10 +34,15 @@ public:
 	std::shared_ptr<Goal> getLostGoal() const;
 	std::shared_ptr<Map> getMap();
 	
+	void addFrameEvent(std::shared_ptr<Event> event);
+	void addEndGameEvent(std::shared_ptr<Event> event);
+	
 private:
 	sf::RenderWindow window;
 	Turn turn;
 	std::vector<std::shared_ptr<Entity>> entities;
+	std::set<std::shared_ptr<Event>> frameEvents;
+	std::set<std::shared_ptr<Event>> endGameEvent;
 	std::shared_ptr<CollisionHandler> collisionHandler;
 	std::shared_ptr<Map> map;
 	std::shared_ptr<Entity> wasdControlled;

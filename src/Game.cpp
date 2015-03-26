@@ -5,10 +5,13 @@
 #include "CollisionHandler.h"
 #include "treasureevent.h"
 #include "treasurefound.h"
+#include "SaveMatrix.h"
+#include "observation.h"
 #include "concretemapinfo.h"
 #include "Entity/Player.h"
 
 #include <iostream>
+#include <thread>
 
 using namespace std;
 
@@ -22,7 +25,6 @@ Game::Game() : window(sf::VideoMode{64 * 16, 64 * 8}, "Game"), map{make_shared<M
 void Game::init()
 {
 	map->generateTileset();
-	map->generateMap();
 	auto player1 = make_shared<Player>();
 	auto player2 = make_shared<Player>();
 	player1->setStartPosition({8, 0});
@@ -42,8 +44,17 @@ void Game::init()
 	treasureFound->setTreasureType(map->getTileSet()[3]);
 	setWinGoal(treasureFound);
 	
-	turn.addEndTurnEvent(treasureFound);
+	auto observation = make_shared<Observation>();
+	observation->setMap(map);
+	observation->setSubject(wasdControlled);
+	
+	auto saveMatrix = make_shared<SaveMatrix>();
+	saveMatrix->setObservation(observation);
+	
 	turn.addEndTurnEvent(treasureEvent);
+	turn.addEndTurnEvent(observation);
+	
+	addEndGameEvent(saveMatrix);
 	
 	reset();
 }
@@ -72,20 +83,10 @@ void Game::mainLoop()
 		handleEvent();
 		if (turn.shouldApply()) {
 			turn.apply();
-// 			vector<int> tour;
-// 			for (auto tile : map->getTiles()) {
-// 				if (tile->getTileType()->isWalkable()) {
-// 					auto distance = tile->getPosition() - player2->getPosition();
-// 					if (abs(distance.x) <= 1 && abs(distance.y) <= 1) {
-// 						tour.push_back(0);
-// 					} else {
-// 						tour.push_back(1);
-// 					}
-// 				}
-// 			}
 		}
 		render();
 	}
+	end();
 }
 
 void Game::handleEvent()
@@ -117,6 +118,10 @@ void Game::handleEvent()
 			}
 		}
 	}
+	
+	for (auto event : frameEvents) {
+		event->trigger();
+	}
 }
 
 shared_ptr<Goal> Game::getLostGoal() const
@@ -131,6 +136,7 @@ shared_ptr<Goal> Game::getWinGoal() const
 
 void Game::setLostGoal(shared_ptr<Goal> lostGoal)
 {
+	addFrameEvent(lostGoal);
 	lostGoal->setCallback([this]{
 		lost();
 	});
@@ -139,6 +145,7 @@ void Game::setLostGoal(shared_ptr<Goal> lostGoal)
 
 void Game::setWinGoal(shared_ptr<Goal> winGoal)
 {
+	addFrameEvent(winGoal);
 	winGoal->setCallback([this]{
 		win();
 	});
@@ -147,7 +154,9 @@ void Game::setWinGoal(shared_ptr<Goal> winGoal)
 
 void Game::end()
 {
-	
+	for (auto event : endGameEvent) {
+		event->trigger();
+	}
 }
 
 void Game::lost()
@@ -160,12 +169,15 @@ void Game::reset()
 	for (auto entity : entities) {
 		entity->resetPosition();
 	}
+	map->generateMap();
 	turn.reset();
 }
 
 void Game::win()
 {
 	cout << "You win!" << endl;
+	this_thread::sleep_for(chrono::seconds(1));
+	reset();
 }
 
 shared_ptr<Map> Game::getMap()
@@ -191,4 +203,14 @@ void Game::render()
 	}
 	
 	window.display();
+}
+
+void Game::addFrameEvent(shared_ptr<Event> event)
+{
+	frameEvents.emplace(event);
+}
+
+void Game::addEndGameEvent(shared_ptr<Event> event)
+{
+	endGameEvent.emplace(event);
 }
