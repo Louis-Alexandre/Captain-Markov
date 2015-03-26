@@ -9,6 +9,7 @@ Map::Map()
 
 void Map::generateMap()
 {
+	tiles.clear();
 	std::vector<int> map {
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
 		1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1,

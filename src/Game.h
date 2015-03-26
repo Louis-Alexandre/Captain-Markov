@@ -5,11 +5,14 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
+#include <thread>
+
 class Goal;
 class Map;
 class Entity;
 class CollisionHandler;
 class Event;
+class TreasureFound;
 
 class Game
 {
@@ -48,5 +51,8 @@ private:
 	std::shared_ptr<Entity> wasdControlled;
 	std::shared_ptr<Entity> arrowControlled;
 	std::shared_ptr<Goal> winGoal;
+	std::shared_ptr<TreasureFound> _treasureFound;
+	
+	std::thread _thread;
 	std::shared_ptr<Goal> lostGoal;
 };

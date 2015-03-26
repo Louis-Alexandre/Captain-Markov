@@ -1,3 +1,5 @@
+#include "bw.h"
+
 #include <vector>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <numeric>
@@ -9,7 +11,7 @@
 using namespace std;
 using namespace boost::numeric::ublas;
 
-matrix<double> MINI(std::vector<matrix<double>> C, matrix<double> Mini, std::vector<double> pie, int iter) {
+matrix<double> BW(std::vector<matrix<double>> C, matrix<double> Mini, std::vector<double> pie, int iter) {
 
 // 	C est la les des matrices d<observations
 // 	Mini est la matrice de transition initiale
@@ -17,14 +19,14 @@ matrix<double> MINI(std::vector<matrix<double>> C, matrix<double> Mini, std::vec
 //  m est le nombre detat
 //  iter, le nombre diteration desire
 	const int m = C[0].size2();
-	const int obs = C.size(); // Nombre de parties joués
-	auto nouvMm = std::vector<matrix<double>>(obs, matrix<double>(m,m)); // Ce qui va stocker nos poids de transition pour chaque parties
+	const int nbTours = C.size(); // Nombre de parties joués
+	auto nouvMm = std::vector<matrix<double>>(nbTours, matrix<double>(m,m)); // Ce qui va stocker nos poids de transition pour chaque parties
 
     for ( int k=0 ; k < iter; ++k) {
 
         matrix<double> nouvM = Mini;
 
-        for ( int o=0; o < obs; ++o) {
+        for ( int o=0; o < nbTours; ++o) {
 
             int n = C[o].size1();
             auto lalpha = Alpha(C[o],nouvM,pie);
@@ -46,15 +48,19 @@ matrix<double> MINI(std::vector<matrix<double>> C, matrix<double> Mini, std::vec
 
         nouvM = nouvMm[0];
 
-        for ( int o=1; o< obs; ++o) {
+        for ( int o=1; o< nbTours; ++o) {
             nouvM = nouvM + nouvMm[o];
         }
 
         for ( int j=0; j<m; ++j) {
 			double sumLigne = sum(ligne(nouvM,j));
-            if ( sumLigne ==0 ) {
-                nouvM(j,j) = 1;
+            //if ( sumLigne ==0 ) {
+              //  nouvM(j,j) = 1;
 
+			if ( sumLigne == 0 ) {
+				for ( int i = 0; i <m; ++i ) {
+					nouvM(j,i) = Mini(j,i);
+				}
             } else {
                 for ( int i = 0;  i <m; ++i){
                     nouvM(j,i) = nouvM(j,i) / sumLigne;

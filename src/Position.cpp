@@ -1,3 +1,5 @@
+#include "Position.h"
+
 #include <vector>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <numeric>
@@ -27,6 +29,18 @@ matrix<double> Position(matrix<double> Obs, matrix<double> M, std::vector<double
             Probs(i,j) = exp(alpha(i,j)-corr);
         }
     }
+    
+	for ( int j=0; j<n; ++j) {
+		double sumLigne = sum(ligne(Probs,j));
+		if ( sumLigne ==0 ) {
+			Probs(j,j) = 1;
+
+		} else {
+			for ( int i = 0;  i <m; ++i){
+				Probs(j,i) = Probs(j,i) / sumLigne;
+			}
+		}
+	}
     return Probs;
 
 }

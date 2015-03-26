@@ -15,11 +15,11 @@ void SaveMatrix::trigger()
 	if (inSave) {
 		      inSave >> root;
 	} else {
-		root["observations"] = Json::objectValue;
-		root["observations"]["rounds"] = Json::arrayValue;
+		root["games"] = Json::arrayValue;
 	}
 	
-	Json::Value game = Json::arrayValue;
+	Json::Value game = Json::objectValue;
+	game["observations"] = Json::arrayValue;
 	
 	for (auto turn : observation->getObservations()) {
 		Json::Value turnValue = Json::arrayValue;
@@ -27,10 +27,10 @@ void SaveMatrix::trigger()
 		for (auto value : turn) {
 			turnValue.append(value);
 		}
-		game.append(turnValue);
+		game["observations"].append(turnValue);
 	}
 	
-	root["observations"]["rounds"].append(game);
+	root["games"].append(game);
 	ofstream outSave{"observations.json", ifstream::binary | ofstream::trunc};
 	
 	Json::FastWriter writer;

@@ -10,6 +10,7 @@
 #include "observation.h"
 #include "concretemapinfo.h"
 #include "Entity/Player.h"
+#include "matrixprinter.h"
 
 #include <iostream>
 #include <thread>
@@ -40,20 +41,20 @@ void Game::init()
 	treasureEvent->setTreasureType(map->getTileSet()[2]);
 	treasureEvent->setTreasureCheckedType(map->getTileSet()[3]);
 	
-	auto treasureFound = make_shared<TreasureFound>();
-	treasureFound->setMap(map);
-	treasureFound->setTreasureType(map->getTileSet()[3]);
-	setWinGoal(treasureFound);
+	_treasureFound = make_shared<TreasureFound>();
+	_treasureFound->setMap(map);
+	_treasureFound->setTreasureType(map->getTileSet()[3]);
 	
 	auto captainFoundPlayer = make_shared<CaptainFoundPlayer>();
 	captainFoundPlayer->setCaptain(player2);
 	captainFoundPlayer->setMatelot(player1);
-	captainFoundPlayer->setMap(map);
-	setLostGoal(captainFoundPlayer);
 
 	auto observation = make_shared<Observation>();
 	observation->setMap(map);
 	observation->setSubject(wasdControlled);
+
+	auto matrixPrinter = make_shared<MatrixPrinter>();
+	matrixPrinter->setObservation(observation);
 	
 	auto saveMatrix = make_shared<SaveMatrix>();
 	saveMatrix->setObservation(observation);
@@ -62,7 +63,11 @@ void Game::init()
 	turn.addEndTurnEvent(treasureEvent);
 	turn.addEndTurnEvent(observation);
 	
+	setLostGoal(captainFoundPlayer);
+	setWinGoal(_treasureFound);
+	
 	addEndGameEvent(saveMatrix);
+	addEndGameEvent(matrixPrinter);
 	
 	reset();
 }
@@ -170,6 +175,8 @@ void Game::end()
 void Game::lost()
 {
 	cout << "You lost!" << endl;
+	render();
+	this_thread::sleep_for(chrono::seconds(1));
 	reset();
 }
 
@@ -185,6 +192,7 @@ void Game::reset()
 void Game::win()
 {
 	cout << "You win!" << endl;
+	render();
 	this_thread::sleep_for(chrono::seconds(1));
 	reset();
 }
