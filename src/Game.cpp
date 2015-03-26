@@ -5,6 +5,7 @@
 #include "CollisionHandler.h"
 #include "treasureevent.h"
 #include "treasurefound.h"
+#include "CaptainFoundPlayer.h"
 #include "SaveMatrix.h"
 #include "observation.h"
 #include "concretemapinfo.h"
@@ -44,6 +45,12 @@ void Game::init()
 	treasureFound->setTreasureType(map->getTileSet()[3]);
 	setWinGoal(treasureFound);
 	
+	auto captainFoundPlayer = make_shared<CaptainFoundPlayer>();
+	captainFoundPlayer->setCaptain(player2);
+	captainFoundPlayer->setMatelot(player1);
+	captainFoundPlayer->setMap(map);
+	setLostGoal(captainFoundPlayer);
+
 	auto observation = make_shared<Observation>();
 	observation->setMap(map);
 	observation->setSubject(wasdControlled);
@@ -51,6 +58,7 @@ void Game::init()
 	auto saveMatrix = make_shared<SaveMatrix>();
 	saveMatrix->setObservation(observation);
 	
+	turn.addEndTurnEvent(captainFoundPlayer);
 	turn.addEndTurnEvent(treasureEvent);
 	turn.addEndTurnEvent(observation);
 	
@@ -162,6 +170,7 @@ void Game::end()
 void Game::lost()
 {
 	cout << "You lost!" << endl;
+	reset();
 }
 
 void Game::reset()
@@ -187,7 +196,7 @@ shared_ptr<Map> Game::getMap()
 
 void Game::render()
 {
-	auto mapInfo = make_unique<ConcreteMapInfo>(map);
+	auto mapInfo = unique_ptr<ConcreteMapInfo>(new ConcreteMapInfo(map));
 	
 	window.clear(sf::Color::Black);
 
