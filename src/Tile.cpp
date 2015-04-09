@@ -56,3 +56,14 @@ void Tile::setHeuristic(double probabiliter)
 
 }
 
+int Tile::getNodeDistance() const
+{
+	return nodeDistance;
+}
+
+void Tile::setNodeDistance(int nodeDistance)
+{
+	this->nodeDistance = nodeDistance;
+}
+
+

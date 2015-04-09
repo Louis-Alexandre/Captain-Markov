@@ -19,6 +19,9 @@ public:
 	int getTileWidth() const;
  	double getHeuristic();
  	void setHeuristic(double probabiliter);
+	void setNodeDistance(int nodeDistance);
+	int getNodeDistance() const;
+	
 	
 	
 
@@ -26,6 +29,7 @@ private:
 	//type goal
 	std::shared_ptr<TileType> tileType;
 	double heuristic;
+	int nodeDistance;
 	int tileWidth;
 	int tileHeight;
 	sf::Vector2i position;
