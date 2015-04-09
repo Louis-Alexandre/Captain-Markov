@@ -1,6 +1,7 @@
 #pragma once
 
 #include "matrixprovider.h"
+#include "observationprovider.h"
 
 #include <memory>
 #include <vector>
@@ -8,13 +9,12 @@
 class MatrixLoader;
 class Observation;
 
-class AppendMatrixProvider : public MatrixProvider
+class AppendMatrixProvider : public ObservationProvider
 {
 public:
 	AppendMatrixProvider(std::shared_ptr<MatrixLoader> loader, std::shared_ptr<Observation> observation);
 	
-	boost::numeric::ublas::matrix<int> getMatrix() const override;
-	std::vector<std::vector<int>> getVecVec() const override;
+    std::vector< boost::numeric::ublas::matrix< int > > getObservation() const override;
 	
 private:
 	std::shared_ptr<MatrixLoader> loader;

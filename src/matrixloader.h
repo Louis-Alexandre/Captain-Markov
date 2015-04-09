@@ -5,10 +5,10 @@
 class MatrixLoader
 {
 public:
-	std::vector<std::vector<int>> getAll() const;
+	std::vector<std::vector<std::vector<int>>> getAll() const;
 	void load();
 	
 private:
 	bool loaded = false;
-	std::vector<std::vector<int>> cache;
+	std::vector<std::vector<std::vector<int>>> cache;
 };

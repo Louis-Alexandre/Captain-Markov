@@ -48,7 +48,7 @@ void Tile::setTileWidth(int tileWidth)
 
 double Tile::getHeuristic()
 {
-
+	return heuristic;
 }
 
 void Tile::setHeuristic(double probabiliter)

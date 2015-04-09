@@ -13,29 +13,22 @@ AppendMatrixProvider::AppendMatrixProvider(shared_ptr<MatrixLoader> loader, shar
 	
 }
 
-matrix<int> AppendMatrixProvider::getMatrix() const
+vector<matrix<int>> AppendMatrixProvider::getObservation() const
 {
-	auto result = getVecVec();
+	auto previousGames = loader->getAll();
+	auto currentGame = observation->getVecVec();
+	vector<matrix<int>> result;
 	
-	matrix<double> matResult{result.size(), result[0].size()};
-	
-	for (int n = 0 ; n<result.size() ; n++) {
-		for (int m = 0 ; m<result[0].size() ; m++) {
-			matResult(n, m) = result[n][m];
+	for (auto game : previousGames) {
+		matrix<int> mat{game.size(), game[0].size()};
+		for (int n = 0 ; n<game.size() ; n++) {
+			for (int m = 0 ; m<game[0].size() ; m++) {
+				mat(n, m) = game[n][m];
+			}
 		}
+		result.push_back(mat);
 	}
 	
-	return matResult;
-}
-
-vector<vector<int>> AppendMatrixProvider::getVecVec() const
-{
-	vector<vector<int>> result;
-	auto mat1 = loader->getAll();
-	auto mat2 = observation->getObservations();
-	
-	result.insert(result.end(), mat1.begin(), mat1.end());
-	result.insert(result.end(), mat2.begin(), mat2.end());
-	
 	return result;
+	
 }

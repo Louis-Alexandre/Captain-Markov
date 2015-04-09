@@ -5,10 +5,10 @@
 
 using namespace std;
 
-vector<vector<int>> MatrixLoader::getAll() const
+vector<vector<vector<int>>> MatrixLoader::getAll() const
 {
 	if (!loaded) {
-		vector<vector<int>> observations;
+		vector<vector<vector<int>>> observations;
 		ifstream inSave{"observations.json", ifstream::binary};
 		
 		Json::Value root;
@@ -16,13 +16,15 @@ vector<vector<int>> MatrixLoader::getAll() const
 		if (inSave) {
 			inSave >> root;
 			for (auto game : root["games"]) {
+				vector<vector<int>> gameVec;
 				for (auto observation : game["observations"]) {
 					vector<int> observationVec;
 					for (auto result : observation) {
 						observationVec.push_back(result.asInt());
 					}
-					observations.push_back(observationVec);
+					gameVec.push_back(observationVec);
 				}
+				observations.push_back(gameVec);
 			}
 		}
 		
