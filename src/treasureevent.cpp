@@ -18,6 +18,8 @@ void TreasureEvent::trigger()
 			_turnCount++;
 			if (_turnCount == 4) {
 				tile->setTileType(_treasureCheckedType);
+				_turnCount = 0;
+				_lastPosition = {0, 0};
 			}
 		} else {
 			_turnCount = 0;

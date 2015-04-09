@@ -2,6 +2,8 @@
 
 #include "Map.h"
 
+#include <iostream>
+
 using namespace std;
 
 TreasureFound::TreasureFound() : _countToWin(1)

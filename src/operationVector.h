@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <numeric>
 #include <vector>
 #include <boost/numeric/ublas/matrix.hpp>
@@ -59,6 +60,16 @@ T sum(boost::numeric::ublas::matrix<T>& mat)
     return total;
 }
 
+template<typename T, typename O>
+void fill(boost::numeric::ublas::matrix<T>& mat, O callback)
+{
+    for ( int l = 0 ; l < mat.size1(); ++l ) {
+        for ( int c = 0 ; c < mat.size2(); ++c) {
+			mat(l, c) = callback(l, c);
+        }
+    }
+}
+
 template<typename T>
 T sum(std::vector<T>&& vec)
 {
@@ -79,12 +90,13 @@ T sum(boost::numeric::ublas::matrix<T>&& mat)
 }
 
 template<typename T>
-boost::numeric::ublas::matrix<T> ligne(boost::numeric::ublas::matrix<T> A, int laligne) {
+boost::numeric::ublas::matrix<T> ligne(boost::numeric::ublas::matrix<T> mat, int laligne) {
+	
+	int col = mat.size2();
+    boost::numeric::ublas::matrix<T> result(1,col);
 
-    boost::numeric::ublas::matrix<T> result(1,A.size2());
-
-	for (int i = 0; i < A.size2(); ++i) {
-		result(0,i) = A(laligne,i);
+	for (int i = 0; i < col; ++i) {
+		result(0,i) = mat(laligne,i);
 	}
 	
 	return result;
@@ -121,4 +133,15 @@ std::vector<T> expVec(std::vector<T> vec)
 		element = std::exp(element);
 	}
 	return vec;
+}
+
+template<typename T>
+void showMat(boost::numeric::ublas::matrix<T> mat)
+{
+	for ( int l = 0 ; l < mat.size1(); ++l ) {
+        for ( int c = 0 ; c < mat.size2(); ++c) {
+			std::cout << mat(l,c) << ", ";
+        }
+        std::cout << std::endl;
+    }
 }
