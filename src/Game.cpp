@@ -11,6 +11,8 @@
 #include "concretemapinfo.h"
 #include "Entity/Player.h"
 #include "matrixprinter.h"
+#include "appendmatrixprovider.h"
+#include "matrixloader.h"
 
 #include <iostream>
 #include <thread>
@@ -41,9 +43,9 @@ void Game::init()
 	treasureEvent->setTreasureType(map->getTileSet()[2]);
 	treasureEvent->setTreasureCheckedType(map->getTileSet()[3]);
 	
-	_treasureFound = make_shared<TreasureFound>();
-	_treasureFound->setMap(map);
-	_treasureFound->setTreasureType(map->getTileSet()[3]);
+	treasureFound = make_shared<TreasureFound>();
+	treasureFound->setMap(map);
+	treasureFound->setTreasureType(map->getTileSet()[3]);
 	
 	auto captainFoundPlayer = make_shared<CaptainFoundPlayer>();
 	captainFoundPlayer->setCaptain(player2);
@@ -52,9 +54,12 @@ void Game::init()
 	auto observation = make_shared<Observation>();
 	observation->setMap(map);
 	observation->setSubject(wasdControlled);
+	
+	auto matrixLoader = make_shared<MatrixLoader>();
+	auto completeMatrixProvider = make_shared<AppendMatrixProvider>(matrixLoader, observation);
 
 	auto matrixPrinter = make_shared<MatrixPrinter>();
-	matrixPrinter->setObservation(observation);
+	matrixPrinter->setObservation(completeMatrixProvider);
 	
 	auto saveMatrix = make_shared<SaveMatrix>();
 	saveMatrix->setObservation(observation);
@@ -64,7 +69,7 @@ void Game::init()
 	turn.addEndTurnEvent(observation);
 	
 	setLostGoal(captainFoundPlayer);
-	setWinGoal(_treasureFound);
+	setWinGoal(treasureFound);
 	
 	addEndGameEvent(saveMatrix);
 	addEndGameEvent(matrixPrinter);

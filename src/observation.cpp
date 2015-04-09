@@ -6,6 +6,7 @@
 #include "TileType.h"
 
 using namespace std;
+using boost::numeric::ublas::matrix;
 
 void Observation::trigger()
 {
@@ -49,5 +50,25 @@ shared_ptr<Entity> Observation::getSubject() const
 void Observation::setSubject(shared_ptr<Entity> subject)
 {
 	this->subject = subject;
+}
+
+boost::numeric::ublas::matrix<int> Observation::getMatrix() const
+{
+	auto result = getVecVec();
+	
+	matrix<double> matResult{result.size(), result[0].size()};
+	
+	for (int n = 0 ; n<result.size() ; n++) {
+		for (int m = 0 ; m<result[0].size() ; m++) {
+			matResult(n, m) = result[n][m];
+		}
+	}
+	
+	return matResult;
+}
+
+vector<vector<int>> Observation::getVecVec() const
+{
+	return getObservations();
 }
 

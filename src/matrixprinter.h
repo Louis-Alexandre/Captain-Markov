@@ -4,17 +4,16 @@
 
 #include <memory>
 
-class Observation;
+class MatrixProvider;
 
 class MatrixPrinter : public Event
 {
 public:
-	
-	void setObservation(std::shared_ptr<Observation> observation);
-	std::shared_ptr<Observation> getObservation();
+	void setObservation(std::shared_ptr<MatrixProvider> observation);
+	std::shared_ptr<MatrixProvider> getObservation();
 	
     void trigger() override;
 	
 private:
-	std::shared_ptr<Observation> observation;
+	std::shared_ptr<MatrixProvider> observation;
 };

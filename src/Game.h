@@ -46,13 +46,12 @@ private:
 	std::vector<std::shared_ptr<Entity>> entities;
 	std::set<std::shared_ptr<Event>> frameEvents;
 	std::set<std::shared_ptr<Event>> endGameEvent;
+	
 	std::shared_ptr<CollisionHandler> collisionHandler;
 	std::shared_ptr<Map> map;
 	std::shared_ptr<Entity> wasdControlled;
 	std::shared_ptr<Entity> arrowControlled;
 	std::shared_ptr<Goal> winGoal;
-	std::shared_ptr<TreasureFound> _treasureFound;
-	
-	std::thread _thread;
+	std::shared_ptr<TreasureFound> treasureFound;
 	std::shared_ptr<Goal> lostGoal;
 };

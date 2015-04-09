@@ -1,24 +1,24 @@
 #include "matrixprinter.h"
 
-#include "observation.h"
+#include "matrixprovider.h"
 
 #include <iostream>
 
 using namespace std;
 
-shared_ptr< Observation > MatrixPrinter::getObservation()
+shared_ptr<MatrixProvider> MatrixPrinter::getObservation()
 {
 	return observation;
 }
 
-void MatrixPrinter::setObservation(shared_ptr< Observation > observation)
+void MatrixPrinter::setObservation(shared_ptr<MatrixProvider> observation)
 {
 	this->observation = observation;
 }
 
 void MatrixPrinter::trigger()
 {
-	for (auto turn : observation->getObservations()) {
+	for (auto turn : observation->getVecVec()) {
 		for (auto value : turn) {
 			cout << value << ", ";
 		}

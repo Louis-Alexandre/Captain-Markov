@@ -1,6 +1,7 @@
 #pragma once
 
 #include "event.h"
+#include "matrixprovider.h"
 
 #include <memory>
 #include <vector>
@@ -9,7 +10,7 @@
 class Map;
 class Entity;
 
-class Observation : public Event
+class Observation : public Event, public MatrixProvider
 {
 public:
 	std::shared_ptr<Map> getMap() const;
@@ -21,6 +22,9 @@ public:
 	std::shared_ptr<Entity> getSubject() const;
 	
 	std::vector<std::vector<int>> getObservations() const;
+	
+    boost::numeric::ublas::matrix<int> getMatrix() const override;
+    std::vector<std::vector<int>> getVecVec() const override;
 	
 private:
 	std::vector<std::vector<int>> observations;
