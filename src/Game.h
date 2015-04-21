@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <thread>
+#include <boost/numeric/ublas/matrix.hpp>
 
 class Goal;
 class Map;
@@ -41,6 +42,7 @@ public:
 	void addEndGameEvent(std::shared_ptr<Event> event);
 	
 private:
+	boost::numeric::ublas::matrix<double> mIni;
 	sf::RenderWindow window;
 	Turn turn;
 	std::vector<std::shared_ptr<Entity>> entities;

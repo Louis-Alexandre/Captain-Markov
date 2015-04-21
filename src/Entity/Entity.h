@@ -16,7 +16,9 @@ public:
 	void setPosition(sf::Vector2i position);
 	sf::Vector2i getStartPosition() const;
 	void setStartPosition(sf::Vector2i position);
-	void move(sf::Vector2i movement);
+	sf::Vector2i getNextPosition() const;
+	void setNextPosition(sf::Vector2i position);
+	void move();
 	
 	void resetPosition();
 	virtual void draw(sf::RenderWindow& window, MapInfo* mapInfo);
@@ -26,6 +28,7 @@ public:
 	
 private:
 	sf::Vector2i startPosition;
+	sf::Vector2i nextPosition;
 	sf::Vector2i position;
 	std::shared_ptr<CollisionHandler> collisionHandler;
 	

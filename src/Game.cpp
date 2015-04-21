@@ -17,7 +17,6 @@
 
 #include <iostream>
 #include <thread>
-#include <boost/numeric/ublas/matrix.hpp>
 
 using namespace std;
 using boost::numeric::ublas::matrix;
@@ -28,7 +27,8 @@ Game::Game() : window(sf::VideoMode {64 * 16, 64 * 8}, "Game"), map {make_shared
 	map->setWidth(64 * 16);
 }
 
-void Game::init() {
+void Game::init()
+{
 	map->generateTileset();
 	auto player1 = make_shared<Player>();
 	auto player2 = make_shared<Player>();
@@ -59,41 +59,41 @@ void Game::init() {
 	auto matrixLoader = make_shared<MatrixLoader>();
 	auto completeMatrixProvider = make_shared<AppendMatrixProvider>(matrixLoader, observation);
 
-// 	auto matrixPrinter = make_shared<MatrixPrinter>();
-// 	matrixPrinter->setObservation(completeMatrixProvider);
-
 	auto saveMatrix = make_shared<SaveMatrix>();
 	saveMatrix->setObservation(observation);
 
 	turn.addEndTurnEvent(captainFoundPlayer);
 	turn.addEndTurnEvent(treasureEvent);
-	turn.addEndTurnEvent(observation);
+	turn.addPreApplyEvent(observation);
 
 	setLostGoal(captainFoundPlayer);
 	setWinGoal(treasureFound);
 
 	addEndGameEvent(saveMatrix);
-// 	addEndGameEvent(matrixPrinter);
 
 	reset();
 }
 
-void Game::addEntity(shared_ptr<Entity> entity) {
+void Game::addEntity(shared_ptr<Entity> entity)
+{
 	entity->setCollisionHandler(collisionHandler);
 	entities.push_back(entity);
 }
 
-void Game::setArrowControlled(shared_ptr<Entity> entity) {
+void Game::setArrowControlled(shared_ptr<Entity> entity)
+{
 	arrowControlled = entity;
 	addEntity(entity);
 }
 
-void Game::setWasdControlled(shared_ptr<Entity> entity) {
+void Game::setWasdControlled(shared_ptr<Entity> entity)
+{
 	wasdControlled = entity;
 	addEntity(entity);
 }
 
-void Game::mainLoop() {
+void Game::mainLoop()
+{
 	while (window.isOpen()) {
 		handleEvent();
 		if (turn.shouldApply()) {
@@ -104,7 +104,8 @@ void Game::mainLoop() {
 	end();
 }
 
-void Game::handleEvent() {
+void Game::handleEvent()
+{
 	sf::Event event;
 	while (window.pollEvent(event)) {
 		if (event.type == sf::Event::Closed) {
@@ -138,15 +139,18 @@ void Game::handleEvent() {
 	}
 }
 
-shared_ptr<Goal> Game::getLostGoal() const {
+shared_ptr<Goal> Game::getLostGoal() const
+{
 	return lostGoal;
 }
 
-shared_ptr<Goal> Game::getWinGoal() const {
+shared_ptr<Goal> Game::getWinGoal() const
+{
 	return winGoal;
 }
 
-void Game::setLostGoal(shared_ptr<Goal> lostGoal) {
+void Game::setLostGoal(shared_ptr<Goal> lostGoal)
+{
 	addFrameEvent(lostGoal);
 	lostGoal->setCallback([this] {
 		lost();
@@ -154,7 +158,8 @@ void Game::setLostGoal(shared_ptr<Goal> lostGoal) {
 	this->lostGoal = lostGoal;
 }
 
-void Game::setWinGoal(shared_ptr<Goal> winGoal) {
+void Game::setWinGoal(shared_ptr<Goal> winGoal)
+{
 	addFrameEvent(winGoal);
 	winGoal->setCallback([this] {
 		win();
@@ -162,53 +167,53 @@ void Game::setWinGoal(shared_ptr<Goal> winGoal) {
 	this->winGoal = winGoal;
 }
 
-void Game::end() {
+void Game::end()
+{
 	for (auto event : endGameEvent) {
 		event->trigger();
 	}
 }
 
-void Game::lost() {
+void Game::lost()
+{
 	cout << "You lost!" << endl;
 	render();
 	this_thread::sleep_for(chrono::seconds(1));
 	reset();
 }
 
-void Game::reset() {
-	
+void Game::reset()
+{
 	for (auto entity : entities) {
 		entity->resetPosition();
 	}
 	map->generateMap();
-	
+
 	vector<int> pie;
-	
-	vector<std::shared_ptr<Tile>> mappedTiles;
+
+	vector<shared_ptr<Tile>> mappedTiles;
 	for (auto tile : map->getTiles()) {
 		if (tile->getTileType()->isWalkable()) {
 			pie.push_back(arrowControlled->getPosition() == tile->getPosition());
 			mappedTiles.push_back(tile);
 		}
 	}
-	
-	matrix<double> mIni{pie.size(), pie.size()};
-	
+
 	auto tiles = map->getTiles();
-	
-	fill(mIni, [&](int m, int n){
+
+	fill(mIni, [&](int m, int n) {
 		int nearbyTiles = 1;
 		auto current = mappedTiles[m];
 		auto next = mappedTiles[n];
-		
+
 		bool isNearby = current == next;
-		
-		
-		auto left = map->getTileAtPosition(current->getPosition() - sf::Vector2i{-1, 0});
-		auto right = map->getTileAtPosition(current->getPosition() - sf::Vector2i{1, 0});
-		auto up = map->getTileAtPosition(current->getPosition() - sf::Vector2i{0, -1});
-		auto down = map->getTileAtPosition(current->getPosition() - sf::Vector2i{0, 1});
-		
+
+
+		auto left = map->getTileAtPosition(current->getPosition() - sf::Vector2i {-1, 0});
+		auto right = map->getTileAtPosition(current->getPosition() - sf::Vector2i {1, 0});
+		auto up = map->getTileAtPosition(current->getPosition() - sf::Vector2i {0, -1});
+		auto down = map->getTileAtPosition(current->getPosition() - sf::Vector2i {0, 1});
+
 		if (left && left->getTileType()->isWalkable()) {
 			nearbyTiles++;
 			isNearby = left == next || isNearby;
@@ -225,26 +230,29 @@ void Game::reset() {
 			nearbyTiles++;
 			isNearby = down == next || isNearby;
 		}
-		
+
 		return isNearby ? (1.f / nearbyTiles) : 0;
 	});
-	
-	
+
+
 	turn.reset();
 }
 
-void Game::win() {
+void Game::win()
+{
 	cout << "You win!" << endl;
 	render();
 	this_thread::sleep_for(chrono::seconds(1));
 	reset();
 }
 
-shared_ptr<Map> Game::getMap() {
+shared_ptr<Map> Game::getMap()
+{
 	return map;
 }
 
-void Game::render() {
+void Game::render()
+{
 	auto mapInfo = unique_ptr<ConcreteMapInfo>(new ConcreteMapInfo(map));
 
 	window.clear(sf::Color::Black);
@@ -263,10 +271,12 @@ void Game::render() {
 	window.display();
 }
 
-void Game::addFrameEvent(shared_ptr<Event> event) {
+void Game::addFrameEvent(shared_ptr<Event> event)
+{
 	frameEvents.emplace(event);
 }
 
-void Game::addEndGameEvent(shared_ptr<Event> event) {
+void Game::addEndGameEvent(shared_ptr<Event> event)
+{
 	endGameEvent.emplace(event);
 }

@@ -15,15 +15,11 @@ void Observation::trigger()
 		vector<int> turn;
 		for (auto tile : map->getTiles()) {
 			if (tile->getTileType()->isWalkable()) {
-				auto distance = tile->getPosition() - subject->getPosition();
-				if (abs(distance.x) <= 1 && abs(distance.y) <= 1) {
-					turn.push_back(0);
-				} else {
-					turn.push_back(1);
-				}
+				auto distance = tile->getPosition() - subject->getNextPosition();
+				turn.emplace_back(abs(distance.x) > 1 || abs(distance.y) > 1);
 			}
 		}
-		observations.push_back(turn);
+		observations.emplace_back(turn);
 	}
 }
 
@@ -71,4 +67,3 @@ vector<vector<int>> Observation::getVecVec() const
 {
 	return getObservations();
 }
-
