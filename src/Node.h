@@ -16,10 +16,10 @@ public:
 	bool isMarquer();
 	bool isGoal();
 private:
-	int distance;
-	double distanceProbable;
-	bool marquer;
-	bool goal;
+	int distance = 0;
+	double distanceProbable = 0;
+	bool marquer = false;
+	bool goal = false;
 };
 
 
