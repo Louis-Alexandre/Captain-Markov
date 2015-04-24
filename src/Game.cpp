@@ -74,7 +74,7 @@ void Game::init()
 	setLostGoal(captainFoundPlayer);
 	setWinGoal(treasureFound);
 
-// 	addEndGameEvent(saveMatrix);
+	addEndGameEvent(saveMatrix);
 	
 
 	reset();
