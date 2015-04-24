@@ -14,6 +14,11 @@
 #include "appendmatrixprovider.h"
 #include "matrixloader.h"
 #include "operationVector.h"
+#include "mappositiontile.h"
+#include "positionmatrix.h"
+#include "callbackmatrixprovider.h"
+#include "bw.h"
+#include "callbackevent.h"
 
 #include <iostream>
 #include <thread>
@@ -52,12 +57,12 @@ void Game::init()
 	captainFoundPlayer->setCaptain(player2);
 	captainFoundPlayer->setMatelot(player1);
 
-	auto observation = make_shared<Observation>();
+	observation = make_shared<Observation>();
 	observation->setMap(map);
 	observation->setSubject(wasdControlled);
 
 	auto matrixLoader = make_shared<MatrixLoader>();
-	auto completeMatrixProvider = make_shared<AppendMatrixProvider>(matrixLoader, observation);
+	completeMatrixProvider = make_shared<AppendMatrixProvider>(matrixLoader, observation);
 
 	auto saveMatrix = make_shared<SaveMatrix>();
 	saveMatrix->setObservation(observation);
@@ -69,7 +74,8 @@ void Game::init()
 	setLostGoal(captainFoundPlayer);
 	setWinGoal(treasureFound);
 
-	addEndGameEvent(saveMatrix);
+// 	addEndGameEvent(saveMatrix);
+	
 
 	reset();
 }
@@ -176,6 +182,7 @@ void Game::end()
 
 void Game::lost()
 {
+	end();
 	cout << "You lost!" << endl;
 	render();
 	this_thread::sleep_for(chrono::seconds(1));
@@ -189,7 +196,7 @@ void Game::reset()
 	}
 	map->generateMap();
 
-	vector<int> pie;
+	vector<double> pie;
 
 	vector<shared_ptr<Tile>> mappedTiles;
 	for (auto tile : map->getTiles()) {
@@ -201,6 +208,7 @@ void Game::reset()
 
 	auto tiles = map->getTiles();
 
+	matrix<double> mIni{mappedTiles.size(), mappedTiles.size()};
 	fill(mIni, [&](int m, int n) {
 		int nearbyTiles = 1;
 		auto current = mappedTiles[m];
@@ -233,13 +241,26 @@ void Game::reset()
 
 		return isNearby ? (1.f / nearbyTiles) : 0;
 	});
-
-
+	
+	auto transition = BW(completeMatrixProvider->getObservation(), mIni, pie, 20);
+	auto mapPositionTile = make_shared<MapPositionTile>(map);
+	auto positionmatrix = make_shared<PositionMatrix>(observation, mapPositionTile);
+	positionmatrix->setPie(pie);
+	positionmatrix->setTransition(transition);
+	
+// 	turn.addApplyEvent(matrixPrinter);
+	turn.addApplyEvent(make_shared<CallbackEvent>([=](){
+		positionmatrix->makeMatrix();
+		cout << positionmatrix->getPosition().x << ", " << positionmatrix->getPosition().y << endl;
+		showMat(ligne(positionmatrix->getProbability(), positionmatrix->getProbability().size1() -1));
+	}));
 	turn.reset();
+	observation->reset();
 }
 
 void Game::win()
 {
+	end();
 	cout << "You win!" << endl;
 	render();
 	this_thread::sleep_for(chrono::seconds(1));

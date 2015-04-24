@@ -14,6 +14,8 @@ class Entity;
 class CollisionHandler;
 class Event;
 class TreasureFound;
+class Observation;
+class AppendMatrixProvider;
 
 class Game
 {
@@ -42,7 +44,8 @@ public:
 	void addEndGameEvent(std::shared_ptr<Event> event);
 	
 private:
-	boost::numeric::ublas::matrix<double> mIni;
+	std::shared_ptr<AppendMatrixProvider> completeMatrixProvider;
+	std::shared_ptr<Observation> observation;
 	sf::RenderWindow window;
 	Turn turn;
 	std::vector<std::shared_ptr<Entity>> entities;

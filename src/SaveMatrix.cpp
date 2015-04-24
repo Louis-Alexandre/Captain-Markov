@@ -35,6 +35,7 @@ void SaveMatrix::trigger()
 	
 	Json::FastWriter writer;
 	outSave << writer.write(root);
+	observation->reset();
 }
 
 shared_ptr<Observation> SaveMatrix::getObservation() const

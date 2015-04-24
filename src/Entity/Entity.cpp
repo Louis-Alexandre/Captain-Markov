@@ -59,6 +59,7 @@ void Entity::setNextPosition(sf::Vector2i position)
 void Entity::resetPosition()
 {
 	position = startPosition;
+	nextPosition = position;
 }
 
 void Entity::draw(sf::RenderWindow& window, MapInfo* mapInfo)

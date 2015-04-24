@@ -9,11 +9,9 @@ class MatrixProvider;
 class MatrixPrinter : public Event
 {
 public:
-	void setObservation(std::shared_ptr<MatrixProvider> observation);
-	std::shared_ptr<MatrixProvider> getObservation();
-	
+	MatrixPrinter(std::shared_ptr<MatrixProvider> matrixProvider);
     void trigger() override;
 	
 private:
-	std::shared_ptr<MatrixProvider> observation;
+	std::shared_ptr<MatrixProvider> matrixProvider;
 };

@@ -12,11 +12,11 @@ void Observation::trigger()
 {
 	if (mapRef.lock()) {
 		auto map = mapRef.lock();
-		vector<int> turn;
+		vector<double> turn;
 		for (auto tile : map->getTiles()) {
 			if (tile->getTileType()->isWalkable()) {
 				auto distance = tile->getPosition() - subject->getNextPosition();
-				turn.emplace_back(abs(distance.x) > 1 || abs(distance.y) > 1);
+				turn.push_back(abs(distance.x) <= 1 && abs(distance.y) <= 1 ? 0:1);
 			}
 		}
 		observations.emplace_back(turn);
@@ -33,7 +33,7 @@ void Observation::setMap(weak_ptr<Map> map)
 	mapRef = map;
 }
 
-vector<vector<int>> Observation::getObservations() const
+vector< vector< double > > Observation::getObservations() const
 {
 	return observations;
 }
@@ -48,9 +48,9 @@ void Observation::setSubject(shared_ptr<Entity> subject)
 	this->subject = subject;
 }
 
-boost::numeric::ublas::matrix<int> Observation::getMatrix() const
+matrix< double > Observation::getMatrix() const
 {
-	auto result = getVecVec();
+	auto result = getObservations();
 	
 	matrix<double> matResult{result.size(), result[0].size()};
 	
@@ -63,7 +63,7 @@ boost::numeric::ublas::matrix<int> Observation::getMatrix() const
 	return matResult;
 }
 
-vector<vector<int>> Observation::getVecVec() const
+void Observation::reset()
 {
-	return getObservations();
+	observations.clear();
 }

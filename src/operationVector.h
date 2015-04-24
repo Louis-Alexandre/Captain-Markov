@@ -145,3 +145,13 @@ void showMat(boost::numeric::ublas::matrix<T> mat)
         std::cout << std::endl;
     }
 }
+
+template<typename T, typename U>
+void forMat(boost::numeric::ublas::matrix<T> mat, U function)
+{
+	for ( int l = 0 ; l < mat.size1(); ++l ) {
+        for ( int c = 0 ; c < mat.size2(); ++c) {
+			function(l, c);
+        }
+    }
+}

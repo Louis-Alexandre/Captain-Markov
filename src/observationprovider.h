@@ -6,5 +6,5 @@
 class ObservationProvider
 {
 public:
-	virtual std::vector<boost::numeric::ublas::matrix<int>> getObservation() const = 0;
+	virtual std::vector<boost::numeric::ublas::matrix<double>> getObservation() const = 0;
 };
