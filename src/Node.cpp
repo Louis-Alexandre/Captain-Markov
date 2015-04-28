@@ -21,6 +21,16 @@ double Node::getDistanceProbable()
 	return distanceProbable;
 }
 
+void Node::setGoal(bool Goal)
+{
+	this->goal = goal;
+}
+
+void Node::setMarquer(bool marquer)
+{
+	this->marquer = marquer;
+}
+
 bool Node::isGoal()
 {
 	return goal;

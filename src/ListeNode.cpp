@@ -12,11 +12,14 @@ ListeNode::ListeNode(shared_ptr<Map> map)
 void ListeNode::setListNode()
 {
 	for(auto tile: map->getTiles()){
-		listNode[tile] = {};
+		if (tile->getTileType()->isWalkable()){
+			listNode[tile] = make_shared<Node>();
+		}
+		
 	}
 }
 
-map<shared_ptr<Tile>, Node> ListeNode::getListNode()
+map<shared_ptr<Tile>, std::shared_ptr<Node>> ListeNode::getListNode()
 {
 	return listNode;
 }
