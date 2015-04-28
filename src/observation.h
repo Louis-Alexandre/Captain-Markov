@@ -21,13 +21,14 @@ public:
 	void setSubject(std::shared_ptr<Entity> subject);
 	std::shared_ptr<Entity> getSubject() const;
 	
-	std::vector<std::vector<int>> getObservations() const;
+	std::vector<std::vector<double>> getObservations() const;
 	
-    boost::numeric::ublas::matrix<int> getMatrix() const override;
-    std::vector<std::vector<int>> getVecVec() const override;
+    boost::numeric::ublas::matrix<double> getMatrix() const override;
+	
+	void reset();
 	
 private:
-	std::vector<std::vector<int>> observations;
+	std::vector<std::vector<double>> observations;
 	std::shared_ptr<Entity> subject;
 	std::weak_ptr<Map> mapRef;
 };

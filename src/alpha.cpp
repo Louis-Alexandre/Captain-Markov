@@ -40,7 +40,7 @@ matrix<double> Alpha(matrix<double> Obs, matrix<double> M, std::vector<double> p
 	for (int i = 0 ; i < m ; ++i) {
 		Alph(0, i) = alph[i];
 	}
-
+	
 	for (int i = 1; i < n ; ++i) { // J'ai changer la partie "i < n, ++j" pour "i < n ; ++i"
 		Alph = prod(Alph, M); // prod est le produit matriciel
 

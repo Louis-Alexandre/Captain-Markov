@@ -14,8 +14,8 @@ matrix<double> Beta(matrix<double> Obs, matrix<double> M, std::vector<double> pi
 // 	pie est le vecteur de probabilite initiale
 
 
-	const int m = Obs.size2(); // Nombre detat, de cases
-	const int n = Obs.size1(); // Nombre dobservation, duree de la partie
+	const size_t m = Obs.size2(); // Nombre detat, de cases
+	const size_t n = Obs.size1(); // Nombre dobservation, duree de la partie
 
 //	matrix Alpha = matrix(NbLigne= n, NbCol= m);  Initialisation de la matric Alpha de tailler n*m
 	matrix<double> Beta(n, m);
@@ -32,7 +32,7 @@ matrix<double> Beta(matrix<double> Obs, matrix<double> M, std::vector<double> pi
 	}
 
 	double log1surc = log(sum(bet));
-	auto Bet = matrix<double>(1, m);
+	matrix<double> Bet{1, m};
 
 	matrix<double> Tligne = trans(ligne(Obs,n-1));
 	Bet = prod(M,Tligne);

@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <thread>
+#include <boost/numeric/ublas/matrix.hpp>
 
 class Goal;
 class Map;
@@ -13,6 +14,8 @@ class Entity;
 class CollisionHandler;
 class Event;
 class TreasureFound;
+class Observation;
+class AppendMatrixProvider;
 
 class Game
 {
@@ -41,6 +44,8 @@ public:
 	void addEndGameEvent(std::shared_ptr<Event> event);
 	
 private:
+	std::shared_ptr<AppendMatrixProvider> completeMatrixProvider;
+	std::shared_ptr<Observation> observation;
 	sf::RenderWindow window;
 	Turn turn;
 	std::vector<std::shared_ptr<Entity>> entities;

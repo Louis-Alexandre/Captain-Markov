@@ -19,10 +19,10 @@ void Entity::setPosition(sf::Vector2i position)
 	this->position = position;
 }
 
-void Entity::move(sf::Vector2i movement)
+void Entity::move()
 {
-	if (collisionHandler->checkCollision(position + movement)) {
-		position += movement;
+	if (collisionHandler->checkCollision(nextPosition)) {
+		position = nextPosition;
 	}
 }
 
@@ -46,9 +46,20 @@ void Entity::setStartPosition(sf::Vector2i position)
 	startPosition = position;
 }
 
+sf::Vector2i Entity::getNextPosition() const
+{
+	return nextPosition;
+}
+
+void Entity::setNextPosition(sf::Vector2i position)
+{
+	nextPosition = position;
+}
+
 void Entity::resetPosition()
 {
 	position = startPosition;
+	nextPosition = position;
 }
 
 void Entity::draw(sf::RenderWindow& window, MapInfo* mapInfo)
