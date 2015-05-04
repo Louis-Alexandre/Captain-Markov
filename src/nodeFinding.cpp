@@ -2,46 +2,31 @@
 #include "Tile.h"
 #include "Node.h"
 
-std::vector< std::shared_ptr< Tile > > nodeFinding::getConnectedNodes() const
-{
-	return connectedNodes;
-}
+using namespace std;
 
 void nodeFinding::initiateNodeFinding(sf::Vector2i position)
 {
+	shared_ptr<Node> goal;
 		for (auto node : listeNode) {
 			node.second->setDistance(0);
 			node.second->setDistanceProbable(0);
 			node.second->setMarquer(false);
 			node.second->setGoal(false);
-			totalDistanceFromGoal = 0;
 			if(node.first->getPosition().x == position.x && node.first->getPosition().y == position.y){
 				node.second->setGoal(true);
-				currentNode = node.second;
+				goal = node.second;
 			}
 		}
-		startNodeFinding();
+		doNodeFinding(goal);
 }
 
-void nodeFinding::startNodeFinding()
+void nodeFinding::doNodeFinding(shared_ptr<Node> node)
 {
 	
 }
 
 
-void nodeFinding::markNode(std::shared_ptr< Tile >)
+void nodeFinding::markNode(shared_ptr< Node >)
 {
 
-}
-
-void nodeFinding::setConnectedNodes(std::shared_ptr< Tile >)
-{
-
-}
-
-void nodeFinding::setDistanceFromGoal(connectedNodes)
-{
-		for(auto node : connectedNodes){
-			
-		}
 }

@@ -21,11 +21,11 @@ matrix<double> Beta(matrix<double> Obs, matrix<double> M, std::vector<double> pi
 	matrix<double> Beta(n, m);
 	matrix<double> bet(1,m);
 	
-		fill(bet, [&](int l, int c){
+	fill(bet, [&](int l, int c){
 		return 1.0/m;
 	});
-		
-		
+	
+	
 	for (int i = 0; i < m; ++i) {
 
 		Beta(n-1, i) = 0; // Si je comprend bien, la derniere ligne est la n-1 ?
@@ -81,7 +81,7 @@ matrix<double> Beta(matrix<double> Obs, matrix<double> M, std::vector<double> pi
 
 
 	}
-
+	
 	return Beta;
 
 }

@@ -21,7 +21,7 @@ void Turn::addMovement(shared_ptr< Entity > entity, sf::Vector2i movement)
 
 bool Turn::shouldApply() const
 {
-	return deltaTime() >= 1.7;
+	return deltaTime() >= 0.7;
 }
 
 void Turn::preApply()

@@ -60,6 +60,7 @@ void Game::init()
 	observation = make_shared<Observation>();
 	observation->setMap(map);
 	observation->setSubject(wasdControlled);
+	observation->setObserve(arrowControlled);
 
 	auto matrixLoader = make_shared<MatrixLoader>();
 	completeMatrixProvider = make_shared<AppendMatrixProvider>(matrixLoader, observation);
@@ -74,7 +75,7 @@ void Game::init()
 	setLostGoal(captainFoundPlayer);
 	setWinGoal(treasureFound);
 
-	addEndGameEvent(saveMatrix);
+// 	addEndGameEvent(saveMatrix);
 	
 
 	reset();
@@ -175,6 +176,17 @@ void Game::setWinGoal(shared_ptr<Goal> winGoal)
 
 void Game::end()
 {
+	vector<double> last;
+
+	for (auto tile : map->getTiles()) {
+		if (tile->getTileType()->isWalkable()) {
+			last.push_back(arrowControlled->getPosition() == tile->getPosition());
+		}
+	}
+	
+	observation->replaceLast(last);
+// 	showMat(observation->getMatrix());
+	
 	for (auto event : endGameEvent) {
 		event->trigger();
 	}
@@ -242,17 +254,20 @@ void Game::reset()
 		return isNearby ? (1.f / nearbyTiles) : 0;
 	});
 	
-	auto transition = BW(completeMatrixProvider->getObservation(), mIni, pie, 20);
+	auto transition = BW(completeMatrixProvider->getObservation(), mIni, pie, 1);
 	auto mapPositionTile = make_shared<MapPositionTile>(map);
 	auto positionmatrix = make_shared<PositionMatrix>(observation, mapPositionTile);
 	positionmatrix->setPie(pie);
 	positionmatrix->setTransition(transition);
+	
+// 	showMat(transition);
 	
 // 	turn.addApplyEvent(matrixPrinter);
 	turn.addApplyEvent(make_shared<CallbackEvent>([=](){
 		positionmatrix->makeMatrix();
 		cout << positionmatrix->getPosition().x << ", " << positionmatrix->getPosition().y << endl;
 		showMat(ligne(positionmatrix->getProbability(), positionmatrix->getProbability().size1() -1));
+		
 	}));
 	turn.reset();
 	observation->reset();

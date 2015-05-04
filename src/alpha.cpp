@@ -42,6 +42,7 @@ matrix<double> Alpha(matrix<double> Obs, matrix<double> M, std::vector<double> p
 	}
 	
 	for (int i = 1; i < n ; ++i) { // J'ai changer la partie "i < n, ++j" pour "i < n ; ++i"
+		
 		Alph = prod(Alph, M); // prod est le produit matriciel
 
 		for (int j = 0; j < m ; ++j) {
@@ -56,7 +57,10 @@ matrix<double> Alpha(matrix<double> Obs, matrix<double> M, std::vector<double> p
 		}
 
 	}
-
+	showMat(Obs);;
+	cout << endl;
+	showMat(expMat(matAlpha));
+	cout << endl;
 	return matAlpha;
 
 }

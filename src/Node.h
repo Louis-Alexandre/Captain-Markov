@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <set>
 #include <memory>
 
 class TileType;
@@ -15,6 +15,8 @@ public:
 	void setMarquer(bool marquer);
 	void setGoal(bool Goal);
 	void setDepth(int depth);
+	void addConnectedNode( std::shared_ptr< Node > node );
+	void removeConnectedNode( std::shared_ptr< Node > node );
 	int getDepth();
 	double getDistanceProbable();
 	bool isMarquer();
@@ -25,6 +27,7 @@ private:
 	double distanceProbable = 0;
 	bool marquer = false;
 	bool goal = false;
+	std::set<std::weak_ptr<Node>, std::owner_less<std::weak_ptr<Node>>> connectedNodes;
 };
 
 

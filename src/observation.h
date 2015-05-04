@@ -25,10 +25,14 @@ public:
 	
     boost::numeric::ublas::matrix<double> getMatrix() const override;
 	
+	void replaceLast(std::vector<double> observation);
 	void reset();
+	
+	void setObserve(std::shared_ptr<Entity> observe);
 	
 private:
 	std::vector<std::vector<double>> observations;
+	std::shared_ptr<Entity> observe;
 	std::shared_ptr<Entity> subject;
 	std::weak_ptr<Map> mapRef;
 };

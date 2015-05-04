@@ -13,8 +13,6 @@ using namespace boost::numeric::ublas;
 
 matrix<double> BW(std::vector<matrix<double>> C, matrix<double> Mini, std::vector<double> pie, int iter)
 {
-	cout << C.size() << endl;
-	cout << C[0].size2() << endl;
 // 	C est la les des matrices d<observations
 // 	Mini est la matrice de transition initiale
 // 	pie est le vecteur de probabilite initiale
@@ -35,7 +33,7 @@ matrix<double> BW(std::vector<matrix<double>> C, matrix<double> Mini, std::vecto
 			auto lbeta = Beta(C[o],nouvM,pie);
 			double p = getMax(ligne(lalpha,n-1));
 			double logl = p + log(sum(expMat(ligne(lalpha,n-1)-p)));
-
+			
 			for (int i=0; i <m; ++i) {
 				for (int j=0; j<m; ++j) {
 					double grostruc = 0;
@@ -56,6 +54,7 @@ matrix<double> BW(std::vector<matrix<double>> C, matrix<double> Mini, std::vecto
 
 		for (int j=0; j<m; ++j) {
 			double sumLigne = sum(ligne(nouvM,j));
+// 			cout << sumLigne << endl;
 			//if ( sumLigne ==0 ) {
 			//  nouvM(j,j) = 1;
 
@@ -75,7 +74,7 @@ matrix<double> BW(std::vector<matrix<double>> C, matrix<double> Mini, std::vecto
 
 		Mini = nouvM;
 	}
-
+	
 	return Mini;
 
 }

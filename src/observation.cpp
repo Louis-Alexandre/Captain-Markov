@@ -16,7 +16,11 @@ void Observation::trigger()
 		for (auto tile : map->getTiles()) {
 			if (tile->getTileType()->isWalkable()) {
 				auto distance = tile->getPosition() - subject->getNextPosition();
-				turn.push_back(abs(distance.x) <= 1 && abs(distance.y) <= 1 ? 0:1);
+				auto distancePlayer = tile->getPosition() - subject->getNextPosition();
+				turn.push_back(
+					(abs(distance.x) > 1 || abs(distance.y) > 1 && !(abs(distancePlayer.x) <= 1 && abs(distancePlayer.y) <= 1)) ||
+					abs(distancePlayer.x) <= 1 && abs(distancePlayer.y) <= 1
+				);
 			}
 		}
 		observations.emplace_back(turn);
@@ -66,4 +70,14 @@ matrix< double > Observation::getMatrix() const
 void Observation::reset()
 {
 	observations.clear();
+}
+
+void Observation::replaceLast(vector<double> observation)
+{
+	observations.push_back(move(observation));
+}
+
+void Observation::setObserve(shared_ptr< Entity > observe)
+{
+	this->observe = observe;
 }

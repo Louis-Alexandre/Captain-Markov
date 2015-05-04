@@ -31,6 +31,17 @@ void Node::setMarquer(bool marquer)
 	this->marquer = marquer;
 }
 
+void Node::addConnectedNode(std::shared_ptr<Node> node)
+{
+	connectedNodes.emplace(node);
+}
+
+void Node::removeConnectedNode(std::shared_ptr<Node> node)
+{
+	connectedNodes.erase(node);
+}
+
+
 bool Node::isGoal()
 {
 	return goal;
