@@ -75,8 +75,8 @@ vector<shared_ptr<TileType>> Map::getTileSet()
 
 shared_ptr<Tile> Map::getTileAtPosition(sf::Vector2i position)
 {
-	for (shared_ptr< Tile > i : this->getTiles()) {
-		if (i->getPosition().x == position.x && i->getPosition().y == position.y) {
+	for (auto i : this->getTiles()) {
+		if (i->getPosition() == position) {
 			return i;
 		}
 	}

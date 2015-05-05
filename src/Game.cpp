@@ -19,6 +19,8 @@
 #include "callbackmatrixprovider.h"
 #include "bw.h"
 #include "callbackevent.h"
+#include "ListeNode.h"
+#include "NodeFinding.h"
 
 #include <iostream>
 #include <thread>
@@ -74,6 +76,10 @@ void Game::init()
 
 	setLostGoal(captainFoundPlayer);
 	setWinGoal(treasureFound);
+	
+	auto listeNode = make_shared<ListeNode>(map);
+	listeNode->makeListNode();
+	auto nodeFinding = make_shared<NodeFinding>(listeNode);
 
 // 	addEndGameEvent(saveMatrix);
 	

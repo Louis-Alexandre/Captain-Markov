@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Node.h"
+#include "Tile.h"
 
 #include <map>
 #include <memory>
@@ -13,7 +14,7 @@ class ListeNode
 {
 public:
 	ListeNode(std::shared_ptr<Map>);
-	void setListNode();
+	void makeListNode();
 	std::map<std::shared_ptr<Tile>, std::shared_ptr<Node>> getListNode();
 	
 private:

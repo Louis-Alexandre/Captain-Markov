@@ -10,20 +10,21 @@ class Node
 {
 public:
 	void setDistance(int distance);
-	int getDistance();
+	int getDistance() const;
 	void setDistanceProbable(double distanceProbable);
 	void setMarquer(bool marquer);
 	void setGoal(bool Goal);
-	void setDepth(int depth);
 	void addConnectedNode( std::shared_ptr< Node > node );
 	void removeConnectedNode( std::shared_ptr< Node > node );
-	int getDepth();
-	double getDistanceProbable();
-	bool isMarquer();
-	bool isGoal();
+	std::set<std::shared_ptr<Node>> getConnectedNodes() const;
+	double getDistanceProbable() const;
+	bool isMarquer() const;
+	bool isGoal() const;
+	
+	void reset();
+	
 private:
 	int distance = 0;
-	int depth = 0;
 	double distanceProbable = 0;
 	bool marquer = false;
 	bool goal = false;
