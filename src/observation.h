@@ -31,6 +31,7 @@ public:
 	void setObserve(std::shared_ptr<Entity> observe);
 	
 private:
+	bool seesPlayer() const;
 	std::vector<std::vector<double>> observations;
 	std::shared_ptr<Entity> observe;
 	std::shared_ptr<Entity> subject;

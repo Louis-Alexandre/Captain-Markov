@@ -44,17 +44,26 @@ void Map::generateMap()
 
 void Map::generateTileset()
 {
+	
+	auto texture1 = make_shared<sf::Texture>();
+	auto texture2 = make_shared<sf::Texture>();
+	auto texture3 = make_shared<sf::Texture>();
+	auto texture4 = make_shared<sf::Texture>();
+	texture1->loadFromFile("res/tileset.png", sf::IntRect{0, 0, 16, 16});
+	texture2->loadFromFile("res/tileset.png", sf::IntRect{16, 0, 16, 16});
+	texture3->loadFromFile("res/tileset.png", sf::IntRect{192, 0, 16, 16});
+	texture4->loadFromFile("res/tileset.png", sf::IntRect{208, 0, 16, 16});
 	auto tileMur = make_shared<TileType>();
 	auto tileDefault = make_shared<TileType>();
 	auto tileGoal = make_shared<TileType>();
 	auto tileGoalChecked = make_shared<TileType>();
-	tileDefault->setColor(sf::Color::Black);
+	tileDefault->setTexture(texture1);
 	tileDefault->setWalkable(true);
-	tileMur->setColor(sf::Color::Green);
+	tileMur->setTexture(texture2);
 	tileMur->setWalkable(false);
-	tileGoal->setColor(sf::Color::Yellow);
+	tileGoal->setTexture(texture3);
 	tileGoal->setWalkable(true);
-	tileGoalChecked->setColor(sf::Color::Magenta);
+	tileGoalChecked->setTexture(texture4);
 	tileGoalChecked->setWalkable(true);
 	tileSet.push_back(tileDefault);
 	tileSet.push_back(tileMur);

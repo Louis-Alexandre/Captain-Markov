@@ -15,11 +15,10 @@ void Observation::trigger()
 		vector<double> turn;
 		for (auto tile : map->getTiles()) {
 			if (tile->getTileType()->isWalkable()) {
-				auto distance = tile->getPosition() - subject->getNextPosition();
-				auto distancePlayer = tile->getPosition() - subject->getNextPosition();
+				sf::Vector2i distance = tile->getPosition() - subject->getPosition();
+				bool seen = seesPlayer();
 				turn.push_back(
-					(abs(distance.x) > 1 || abs(distance.y) > 1 && !(abs(distancePlayer.x) <= 1 && abs(distancePlayer.y) <= 1)) ||
-					abs(distancePlayer.x) <= 1 && abs(distancePlayer.y) <= 1
+					((abs(distance.x) > 1 || abs(distance.y) > 1) && !seen) || (seen && observe->getNextPosition() == tile->getPosition())
 				);
 			}
 		}
@@ -72,9 +71,16 @@ void Observation::reset()
 	observations.clear();
 }
 
+bool Observation::seesPlayer() const
+{
+	sf::Vector2i distance = observe->getNextPosition() - subject->getPosition();
+	return abs(distance.x) <= 1 && abs(distance.y) <= 1;
+}
+
+
 void Observation::replaceLast(vector<double> observation)
 {
-	observations.push_back(move(observation));
+	observations[observations.size() - 1] = move(observation);
 }
 
 void Observation::setObserve(shared_ptr< Entity > observe)

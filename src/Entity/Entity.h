@@ -21,12 +21,15 @@ public:
 	void move();
 	
 	void resetPosition();
-	virtual void draw(sf::RenderWindow& window, MapInfo* mapInfo);
+	void draw(sf::RenderWindow& window, MapInfo* mapInfo);
+	
+	void setTexture(std::shared_ptr<sf::Texture> _texture);
 	
 	void setCollisionHandler(std::shared_ptr<CollisionHandler> collisionHandler);
 	std::shared_ptr<CollisionHandler> getCollisionHandler() const;
 	
 private:
+	std::shared_ptr<sf::Texture> texture;
 	sf::Vector2i startPosition;
 	sf::Vector2i nextPosition;
 	sf::Vector2i position;

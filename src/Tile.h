@@ -2,12 +2,14 @@
 #include <memory>
 #include <string>
 #include <SFML/Graphics.hpp>
+
 class TileType;
+class MapInfo;
+
 class Tile
 {
 public:
 	Tile();
-	Tile(std::shared_ptr<TileType> tileType);
 	
 	sf::Vector2i getPosition() const;
 	void setPosition(sf::Vector2i position);
@@ -22,9 +24,8 @@ public:
 	void setNodeDistance(int nodeDistance);
 	int getNodeDistance() const;
 	
+	void draw(sf::RenderWindow& window, MapInfo* mapInfo);
 	
-	
-
 private:
 	//type goal
 	std::shared_ptr<TileType> tileType;
@@ -33,6 +34,4 @@ private:
 	int tileWidth;
 	int tileHeight;
 	sf::Vector2i position;
-	
-
 };

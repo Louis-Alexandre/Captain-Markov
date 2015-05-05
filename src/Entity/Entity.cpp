@@ -62,10 +62,19 @@ void Entity::resetPosition()
 	nextPosition = position;
 }
 
+void Entity::setTexture(shared_ptr< sf::Texture > _texture)
+{
+	texture = _texture;
+}
+
 void Entity::draw(sf::RenderWindow& window, MapInfo* mapInfo)
 {
 	sf::RectangleShape playerRect(sf::Vector2f{static_cast<float>(mapInfo->getTileWidth()), static_cast<float>(mapInfo->getTileHeight())});
-	playerRect.setFillColor(sf::Color::White);
 	playerRect.setPosition(position.x * mapInfo->getTileWidth(), position.y * mapInfo->getTileHeight());
+	if (!texture) {
+		playerRect.setFillColor(sf::Color::White);
+	} else {
+		playerRect.setTexture(texture.get());
+	}
 	window.draw(playerRect);
 }

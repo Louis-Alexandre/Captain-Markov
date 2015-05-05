@@ -1,13 +1,5 @@
 #include "TileType.h"
 
-void TileType::setColor(sf::Color color)
-{
-	this->color = color;
-}
-sf::Color TileType::getColor() const
-{
-	return color;
-}
 bool TileType::isWalkable() const
 {
 	return walkable;
@@ -17,3 +9,12 @@ void TileType::setWalkable(bool walkable)
 	this-> walkable = walkable;
 }
 
+std::shared_ptr<const sf::Texture> TileType::getTexture() const
+{
+	return texture;
+}
+
+void TileType::setTexture(std::shared_ptr<sf::Texture> _testure)
+{
+	texture = _testure;
+}

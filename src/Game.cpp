@@ -38,10 +38,17 @@ Game::Game() : window(sf::VideoMode {64 * 16, 64 * 8}, "Game"), map {make_shared
 void Game::init()
 {
 	map->generateTileset();
-	auto player1 = make_shared<Player>();
-	auto player2 = make_shared<Player>();
+	auto player1 = make_shared<Entity>();
+	auto player2 = make_shared<Entity>();
 	player1->setStartPosition( {8, 0});
 	player2->setStartPosition( {8, 7});
+	
+	auto texture1 = make_shared<sf::Texture>();
+	auto texture2 = make_shared<sf::Texture>();
+	texture1->loadFromFile("res/matelot.png");
+	texture2->loadFromFile("res/capitain.png");
+	player1->setTexture(texture1);
+	player2->setTexture(texture2);
 
 	setArrowControlled(player1);
 	setWasdControlled(player2);
@@ -86,6 +93,12 @@ void Game::init()
 	turn.addApplyEvent(initNodeFinding);
 	
 	window.setKeyRepeatEnabled(false);
+	
+	turn.addApplyEvent(make_shared<CallbackEvent>([=](){
+		positionMatrix->makeMatrix();
+		cout << positionMatrix->getPosition().x << ", " << positionMatrix->getPosition().y << endl;
+		showMat(ligne(positionMatrix->getProbability(), positionMatrix->getProbability().size1() -1));
+	}));
 
 	setLostGoal(captainFoundPlayer);
 	setWinGoal(treasureFound);
@@ -241,15 +254,6 @@ void Game::setWinGoal(shared_ptr<Goal> winGoal)
 
 void Game::end()
 {
-	vector<double> last;
-
-	for (auto tile : map->getTiles()) {
-		if (tile->getTileType()->isWalkable()) {
-			last.push_back(arrowControlled->getPosition() == tile->getPosition());
-		}
-	}
-	
-	observation->replaceLast(last);
 // 	showMat(observation->getMatrix());
 	
 	for (auto event : endGameEvent) {
@@ -337,6 +341,15 @@ void Game::reset()
 
 void Game::win()
 {
+	vector<double> last;
+
+	for (auto tile : map->getTiles()) {
+		if (tile->getTileType()->isWalkable()) {
+			last.push_back(arrowControlled->getPosition() == tile->getPosition());
+		}
+	}
+	
+	observation->replaceLast(last);
 	end();
 	cout << "You win!" << endl;
 	render();
@@ -355,11 +368,8 @@ void Game::render()
 
 	window.clear(sf::Color::Black);
 
-	for (auto i : map->getTiles()) {
-		sf::RectangleShape tileRectangle(sf::Vector2f {static_cast<float>(mapInfo->getTileWidth()), static_cast<float>(mapInfo->getTileHeight())});
-		tileRectangle.setFillColor(i->getTileType()->getColor());
-		tileRectangle.setPosition(i->getPosition().x * mapInfo->getTileWidth(), i->getPosition().y * mapInfo->getTileHeight());
-		window.draw(tileRectangle);
+	for (auto tile : map->getTiles()) {
+		tile->draw(window, mapInfo.get());
 	}
 
 	for (auto entity : entities) {
