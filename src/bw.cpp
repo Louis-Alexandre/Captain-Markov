@@ -18,14 +18,15 @@ matrix<double> BW(std::vector<matrix<double>> C, matrix<double> Mini, std::vecto
 // 	pie est le vecteur de probabilite initiale
 //  m est le nombre detat
 //  iter, le nombre diteration desire
-	matrix<double> nouvM = Mini;
-	
 	if (C.size() > 0) {
-		const auto m = C[0].size2();
-		const auto nbTours = C.size(); // Nombre de parties joués
-		std::vector<matrix<double>> nouvMm{nbTours, matrix<double>(m,m)}; // Ce qui va stocker nos poids de transition pour chaque parties
-		
+		const int m = C[0].size2();
+		const int nbTours = C.size(); // Nombre de parties joués
+		auto nouvMm = std::vector<matrix<double>>(nbTours, matrix<double>(m,m)); // Ce qui va stocker nos poids de transition pour chaque parties
+
 		for (int k=0 ; k < iter; ++k) {
+
+			matrix<double> nouvM = Mini;
+
 			for (int o=0; o < nbTours; ++o) {
 
 				int n = C[o].size1();
@@ -54,6 +55,9 @@ matrix<double> BW(std::vector<matrix<double>> C, matrix<double> Mini, std::vecto
 
 			for (int j=0; j<m; ++j) {
 				double sumLigne = sum(ligne(nouvM,j));
+	// 			cout << sumLigne << endl;
+				//if ( sumLigne ==0 ) {
+				//  nouvM(j,j) = 1;
 
 				if (sumLigne == 0) {
 					for (int i = 0; i <m; ++i) {
@@ -67,8 +71,10 @@ matrix<double> BW(std::vector<matrix<double>> C, matrix<double> Mini, std::vecto
 				}
 
 			}
+
+
+			Mini = nouvM;
 		}
 	}
-	
-	return nouvM;
+	return Mini;
 }

@@ -53,7 +53,11 @@ sf::Vector2i Entity::getNextPosition() const
 
 void Entity::setNextPosition(sf::Vector2i position)
 {
-	nextPosition = position;
+	if (collisionHandler->checkCollision(position)) {
+		nextPosition = position;
+	} else {
+		nextPosition = this->position;
+	}
 }
 
 void Entity::resetPosition()
