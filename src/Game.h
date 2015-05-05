@@ -36,6 +36,7 @@ public:
 	void lost();
 	void win();
 	void end();
+	void close();
 	void render();
 	void handleEvent();
 	

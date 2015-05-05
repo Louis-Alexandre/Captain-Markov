@@ -88,10 +88,8 @@ void Game::init()
 	setLostGoal(captainFoundPlayer);
 	setWinGoal(treasureFound);
 	
-
-// 	addEndGameEvent(saveMatrix);
+	addEndGameEvent(saveMatrix);
 	
-
 	reset();
 }
 
@@ -122,7 +120,7 @@ void Game::mainLoop()
 		}
 		render();
 	}
-	end();
+	close();
 }
 
 void Game::handleEvent()
@@ -215,6 +213,11 @@ void Game::lost()
 	reset();
 }
 
+void Game::close()
+{
+	
+}
+
 void Game::reset()
 {
 	for (auto entity : entities) {
@@ -267,7 +270,6 @@ void Game::reset()
 
 		return isNearby ? (1.f / nearbyTiles) : 0;
 	});
-	
 	
 	auto transition = BW(completeMatrixProvider->getObservation(), mIni, pie, 1);
 	positionmatrix->setPie(pie);

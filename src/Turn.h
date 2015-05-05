@@ -1,5 +1,7 @@
 #pragma once
 
+#include "optionnal.h"
+
 #include <SFML/Window.hpp>
 #include <map>
 #include <set>
@@ -28,14 +30,17 @@ public:
 	
 	void reset();
 	double deltaTime() const;
+	
+	void addRequiredEntity(std::shared_ptr<Entity> entity);
+	void removeRequiredEntity(std::shared_ptr<Entity> entity);
 
 private:
 	void preApply();
 	std::set<std::shared_ptr<Event>> applyEvents;
 	std::set<std::shared_ptr<Event>> preApplyEvents;
 	std::set<std::shared_ptr<Event>> endTurnEvents;
-	std::vector<sf::Vector2i> mouvement;
-	std::map<std::shared_ptr<Entity>, sf::Vector2i> listMove;
+	std::map<std::shared_ptr<Entity>, optionnal<sf::Vector2i>> listMove;
+	std::set<std::shared_ptr<Entity>> required;
 	std::chrono::high_resolution_clock::time_point lastTime = std::chrono::high_resolution_clock::now();
 	double totalTime = 0;
 };
