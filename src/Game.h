@@ -18,6 +18,7 @@ class Observation;
 class AppendMatrixProvider;
 class NodeFinding;
 class ListeNode;
+class PositionMatrix;
 
 class Game
 {
@@ -63,4 +64,5 @@ private:
 	std::shared_ptr<Goal> lostGoal;
 	std::shared_ptr<NodeFinding> nodeFinding;
 	std::shared_ptr<ListeNode> listeNode;
+	std::shared_ptr<PositionMatrix> positionMatrix;
 };

@@ -21,6 +21,7 @@
 #include "callbackevent.h"
 #include "ListeNode.h"
 #include "NodeFinding.h"
+#include "initnodefinding.h"
 
 #include <iostream>
 #include <thread>
@@ -70,16 +71,23 @@ void Game::init()
 	auto saveMatrix = make_shared<SaveMatrix>();
 	saveMatrix->setObservation(observation);
 
-	turn.addEndTurnEvent(captainFoundPlayer);
-	turn.addEndTurnEvent(treasureEvent);
-	turn.addPreApplyEvent(observation);
-
-	setLostGoal(captainFoundPlayer);
-	setWinGoal(treasureFound);
+	
+	auto mapPositionTile = make_shared<MapPositionTile>(map);
+	auto positionmatrix = make_shared<PositionMatrix>(observation, mapPositionTile);
 	
 	auto listeNode = make_shared<ListeNode>(map);
 	listeNode->makeListNode();
 	auto nodeFinding = make_shared<NodeFinding>(listeNode);
+	auto initNodeFinding = make_shared<InitNodeFinding>(positionmatrix, listeNode);
+	
+	turn.addEndTurnEvent(captainFoundPlayer);
+	turn.addEndTurnEvent(treasureEvent);
+	turn.addPreApplyEvent(observation);
+	turn.addApplyEvent(initNodeFinding);
+
+	setLostGoal(captainFoundPlayer);
+	setWinGoal(treasureFound);
+	
 
 // 	addEndGameEvent(saveMatrix);
 	
@@ -260,12 +268,10 @@ void Game::reset()
 		return isNearby ? (1.f / nearbyTiles) : 0;
 	});
 	
+	
 	auto transition = BW(completeMatrixProvider->getObservation(), mIni, pie, 1);
-	auto mapPositionTile = make_shared<MapPositionTile>(map);
-	auto positionmatrix = make_shared<PositionMatrix>(observation, mapPositionTile);
 	positionmatrix->setPie(pie);
 	positionmatrix->setTransition(transition);
-	
 // 	showMat(transition);
 	
 // 	turn.addApplyEvent(matrixPrinter);
