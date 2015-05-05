@@ -8,33 +8,46 @@
 
 using namespace std;
 
-sf::Vector2i Turn::getMouvement(shared_ptr<Entity> entity)
+sf::Vector2i Turn::getMouvement(shared_ptr<Entity> entity) const
 {
-	return *listMove[entity];
+	auto it = listMove.find(entity);
+	
+	if (it != listMove.end() && it->second) {
+		return *it->second;
+	} else {
+		return sf::Vector2i{0, 0};
+	}
 }
 
-void Turn::addMovement(shared_ptr< Entity > entity, sf::Vector2i movement)
+void Turn::addMovement(shared_ptr<Entity> entity, sf::Vector2i movement)
 {
 	listMove[entity] = movement;
+}
+
+void Turn::removeMovement(shared_ptr<Entity> entity)
+{
+	listMove[entity] = nullopt;
 }
 
 bool Turn::shouldApply() const
 {
 	for (auto entity : required) {
 		auto it = listMove.find(entity);
-		if (it != listMove.end() && !it->second) {
+		if (it == listMove.end() || !it->second) {
 			return false;
 		}
 	}
 	
-	return true;
+	return true && deltaTime() >= 0.25;
 }
 
 void Turn::preApply()
 {
 	for (auto& n : listMove) {
-		n.first->setNextPosition(n.first->getPosition() + *n.second);
-		n.second = nullopt;
+		if (n.second) {
+			n.first->setNextPosition(n.first->getPosition() + *n.second);
+			n.second = nullopt;
+		}
 	}
 	
 	for (auto event : preApplyEvents) {

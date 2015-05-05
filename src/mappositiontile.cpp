@@ -5,7 +5,7 @@
 
 using namespace std;
 
-MapPositionTile::MapPositionTile(shared_ptr<Map> _map) : map{map} {}
+MapPositionTile::MapPositionTile(shared_ptr<Map> _map) : map{_map} {}
 
 sf::Vector2i MapPositionTile::getPosition(int arg)
 {

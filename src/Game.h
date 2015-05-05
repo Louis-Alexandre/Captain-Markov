@@ -48,6 +48,7 @@ public:
 	void addEndGameEvent(std::shared_ptr<Event> event);
 	
 private:
+	void keyChanged();
 	std::shared_ptr<AppendMatrixProvider> completeMatrixProvider;
 	std::shared_ptr<Observation> observation;
 	sf::RenderWindow window;
@@ -66,4 +67,5 @@ private:
 	std::shared_ptr<NodeFinding> nodeFinding;
 	std::shared_ptr<ListeNode> listeNode;
 	std::shared_ptr<PositionMatrix> positionMatrix;
+	std::map<sf::Keyboard::Key, bool> keyPressed;
 };

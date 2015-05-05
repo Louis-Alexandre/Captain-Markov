@@ -57,10 +57,7 @@ matrix<double> Alpha(matrix<double> Obs, matrix<double> M, std::vector<double> p
 		}
 
 	}
-	showMat(Obs);;
-	cout << endl;
-	showMat(expMat(matAlpha));
-	cout << endl;
+	
 	return matAlpha;
 
 }

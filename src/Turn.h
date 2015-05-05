@@ -14,7 +14,8 @@ class Entity;
 class Turn
 {
 public:
-	sf::Vector2i getMouvement(std::shared_ptr<Entity> entity);
+	sf::Vector2i getMouvement(std::shared_ptr<Entity> entity) const;
+	void removeMovement(std::shared_ptr<Entity> entity);
 	void addMovement(std::shared_ptr<Entity> entity, sf::Vector2i movement);
 	bool shouldApply() const;
 	void apply();

@@ -70,20 +70,22 @@ void Game::init()
 
 	auto saveMatrix = make_shared<SaveMatrix>();
 	saveMatrix->setObservation(observation);
-
 	
 	auto mapPositionTile = make_shared<MapPositionTile>(map);
-	auto positionmatrix = make_shared<PositionMatrix>(observation, mapPositionTile);
+	positionMatrix = make_shared<PositionMatrix>(observation, mapPositionTile);
 	
 	auto listeNode = make_shared<ListeNode>(map);
 	listeNode->makeListNode();
 	auto nodeFinding = make_shared<NodeFinding>(listeNode);
-	auto initNodeFinding = make_shared<InitNodeFinding>(positionmatrix, listeNode);
+	auto initNodeFinding = make_shared<InitNodeFinding>(positionMatrix, nodeFinding);
 	
+	turn.addRequiredEntity(arrowControlled);
 	turn.addEndTurnEvent(captainFoundPlayer);
 	turn.addEndTurnEvent(treasureEvent);
 	turn.addPreApplyEvent(observation);
 	turn.addApplyEvent(initNodeFinding);
+	
+	window.setKeyRepeatEnabled(false);
 
 	setLostGoal(captainFoundPlayer);
 	setWinGoal(treasureFound);
@@ -130,31 +132,82 @@ void Game::handleEvent()
 		if (event.type == sf::Event::Closed) {
 			window.close();
 		}
+		
 		if (event.type == sf::Event::KeyPressed) {
-			if (event.key.code == sf::Keyboard::Left) {
-				turn.addMovement(arrowControlled, { -1, 0});
-			} else if (event.key.code == sf::Keyboard::Right) {
-				turn.addMovement(arrowControlled, {1, 0});
-			} else if (event.key.code == sf::Keyboard::Up) {
-				turn.addMovement(arrowControlled, {0, -1});
-			} else if (event.key.code == sf::Keyboard::Down) {
-				turn.addMovement(arrowControlled, {0, 1});
-			} else if (event.key.code == sf::Keyboard::A) {
-				turn.addMovement(wasdControlled, { -1, 0});
-			} else if (event.key.code == sf::Keyboard::D) {
-				turn.addMovement(wasdControlled, {1, 0});
-			} else if (event.key.code == sf::Keyboard::W) {
-				turn.addMovement(wasdControlled, {0, -1});
-			} else if (event.key.code == sf::Keyboard::S) {
-				turn.addMovement(wasdControlled, {0, 1});
-			} else if (event.key.code == sf::Keyboard::Escape) {
+			keyPressed[event.key.code] = true;
+		} else if (event.type == sf::Event::KeyReleased) {
+			if (event.key.code == sf::Keyboard::Escape) {
 				window.close();
+			} else {
+				keyPressed[event.key.code] = false;
 			}
 		}
 	}
+	
+	keyChanged();
 
 	for (auto event : frameEvents) {
 		event->trigger();
+	}
+}
+
+void Game::keyChanged()
+{
+	sf::Vector2i movementArrow;
+	
+	if (keyPressed[sf::Keyboard::Left]) {
+		movementArrow += sf::Vector2i{-1, 0};
+	}
+	
+	if (keyPressed[sf::Keyboard::Right]) {
+		movementArrow += sf::Vector2i{1, 0};
+	}
+	
+	if (keyPressed[sf::Keyboard::Up]) {
+		movementArrow += sf::Vector2i{0, -1};
+	}
+	
+	if (keyPressed[sf::Keyboard::Down]) {
+		movementArrow += sf::Vector2i{0, 1};
+	}
+	
+	if (abs(movementArrow.x) + abs(movementArrow.y) > 1) {
+		movementArrow = sf::Vector2i{0, 0};
+	}
+	
+	sf::Vector2i movementWasd;
+	if (keyPressed[sf::Keyboard::A]) {
+		movementWasd += sf::Vector2i{-1, 0};
+	}
+	
+	if (keyPressed[sf::Keyboard::D]) {
+		movementWasd += sf::Vector2i{1, 0};
+	}
+	
+	if (keyPressed[sf::Keyboard::W]) {
+		movementWasd += sf::Vector2i{0, -1};
+	}
+	
+	if (keyPressed[sf::Keyboard::S]) {
+		movementWasd += sf::Vector2i{0, 1};
+	}
+	
+	if (abs(movementWasd.x) + abs(movementWasd.y) > 1) {
+		movementWasd = sf::Vector2i{0, 0};
+	}
+	
+	if (movementArrow == sf::Vector2i{0, 0} && !keyPressed[sf::Keyboard::Space]) {
+		turn.removeMovement(arrowControlled);
+	} else if (keyPressed[sf::Keyboard::Space]) {
+		turn.addMovement(arrowControlled, sf::Vector2i{0, 0});
+	} else {
+		turn.addMovement(arrowControlled, movementArrow);
+	}
+	
+	if (movementWasd == sf::Vector2i{0, 0}) {
+		turn.removeMovement(wasdControlled);
+	} else {
+		turn.addMovement(wasdControlled, movementWasd);
 	}
 }
 
@@ -271,18 +324,13 @@ void Game::reset()
 		return isNearby ? (1.f / nearbyTiles) : 0;
 	});
 	
-	auto transition = BW(completeMatrixProvider->getObservation(), mIni, pie, 1);
-	positionmatrix->setPie(pie);
-	positionmatrix->setTransition(transition);
-// 	showMat(transition);
+	matrix<double> transition;
 	
-// 	turn.addApplyEvent(matrixPrinter);
-	turn.addApplyEvent(make_shared<CallbackEvent>([=](){
-		positionmatrix->makeMatrix();
-		cout << positionmatrix->getPosition().x << ", " << positionmatrix->getPosition().y << endl;
-		showMat(ligne(positionmatrix->getProbability(), positionmatrix->getProbability().size1() -1));
-		
-	}));
+	transition = BW(completeMatrixProvider->getObservation(), mIni, pie, 20);
+	
+	positionMatrix->setPie(pie);
+	positionMatrix->setTransition(transition);
+	
 	turn.reset();
 	observation->reset();
 }
