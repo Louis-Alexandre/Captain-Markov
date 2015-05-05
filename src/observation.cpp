@@ -17,9 +17,17 @@ void Observation::trigger()
 			if (tile->getTileType()->isWalkable()) {
 				sf::Vector2i distance = tile->getPosition() - subject->getPosition();
 				bool seen = seesPlayer();
-				turn.push_back(
-					((abs(distance.x) > 1 || abs(distance.y) > 1) && !seen) || (seen && observe->getNextPosition() == tile->getPosition())
-				);
+				bool eyeType = isEyeTile(tile);
+				
+				if (eyeType) {
+					turn.push_back(
+						observe->getNextPosition() == tile->getPosition()
+					);	
+				} else {
+					turn.push_back(
+						((abs(distance.x) > 1 || abs(distance.y) > 1) && !seen) || (seen && observe->getNextPosition() == tile->getPosition())
+					);	
+				}
 			}
 		}
 		observations.emplace_back(turn);
@@ -74,9 +82,36 @@ void Observation::reset()
 bool Observation::seesPlayer() const
 {
 	sf::Vector2i distance = observe->getNextPosition() - subject->getPosition();
+	
+	if (!mapRef.expired()) {
+		auto map = mapRef.lock();
+		if (isEyeTile(map->getTileAtPosition(observe->getNextPosition()))) {
+			return true;
+		}
+	}
+	
 	return abs(distance.x) <= 1 && abs(distance.y) <= 1;
 }
 
+bool Observation::isEyeTile(shared_ptr<Tile> tile) const
+{
+	if (!mapRef.expired() && tile) {
+		auto map = mapRef.lock();
+		
+		for (auto type : eyeTypes) {
+			if (type == tile->getTileType()) {
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+void Observation::addEyeType(shared_ptr<TileType> type)
+{
+	eyeTypes.emplace(type);
+}
 
 void Observation::replaceLast(vector<double> observation)
 {

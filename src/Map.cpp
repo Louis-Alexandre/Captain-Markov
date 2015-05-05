@@ -13,9 +13,9 @@ void Map::generateMap()
 	std::vector<int> map {
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
 		1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1,
-		1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-		1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0,
+		1, 0, 4, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 4, 1,
+		1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 2,
+		1, 0, 4, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0,
 		2, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,
 		0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
@@ -49,16 +49,21 @@ void Map::generateTileset()
 	auto texture2 = make_shared<sf::Texture>();
 	auto texture3 = make_shared<sf::Texture>();
 	auto texture4 = make_shared<sf::Texture>();
+	auto texture5 = make_shared<sf::Texture>();
 	texture1->loadFromFile("res/tileset.png", sf::IntRect{0, 0, 16, 16});
 	texture2->loadFromFile("res/tileset.png", sf::IntRect{16, 0, 16, 16});
 	texture3->loadFromFile("res/tileset.png", sf::IntRect{192, 0, 16, 16});
 	texture4->loadFromFile("res/tileset.png", sf::IntRect{208, 0, 16, 16});
+	texture5->loadFromFile("res/tileset.png", sf::IntRect{224, 0, 16, 16});
 	auto tileMur = make_shared<TileType>();
 	auto tileDefault = make_shared<TileType>();
 	auto tileGoal = make_shared<TileType>();
 	auto tileGoalChecked = make_shared<TileType>();
+	auto tileParrot = make_shared<TileType>();
 	tileDefault->setTexture(texture1);
 	tileDefault->setWalkable(true);
+	tileParrot->setTexture(texture5);
+	tileParrot->setWalkable(true);
 	tileMur->setTexture(texture2);
 	tileMur->setWalkable(false);
 	tileGoal->setTexture(texture3);
@@ -69,6 +74,7 @@ void Map::generateTileset()
 	tileSet.push_back(tileMur);
 	tileSet.push_back(tileGoal);
 	tileSet.push_back(tileGoalChecked);
+	tileSet.push_back(tileParrot);
 
 }
 

@@ -336,7 +336,9 @@ void Game::reset()
 	positionMatrix->setTransition(transition);
 	
 	turn.reset();
+	observation->addEyeType(map->getTileSet()[4]);
 	observation->reset();
+	observation->trigger();
 }
 
 void Game::win()

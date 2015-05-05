@@ -9,6 +9,8 @@
 
 class Map;
 class Entity;
+class TileType;
+class Tile;
 
 class Observation : public Event, public MatrixProvider
 {
@@ -29,9 +31,12 @@ public:
 	void reset();
 	
 	void setObserve(std::shared_ptr<Entity> observe);
+	void addEyeType(std::shared_ptr<TileType> type);
 	
 private:
 	bool seesPlayer() const;
+	bool isEyeTile(std::shared_ptr<Tile> tile) const;
+	std::set<std::shared_ptr<TileType>> eyeTypes;
 	std::vector<std::vector<double>> observations;
 	std::shared_ptr<Entity> observe;
 	std::shared_ptr<Entity> subject;
