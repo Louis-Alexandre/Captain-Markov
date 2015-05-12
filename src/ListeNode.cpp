@@ -2,10 +2,7 @@
 #include "Map.h"
 
 using namespace std;
-ListeNode::ListeNode(shared_ptr<Map> map)
-{
-	this->map = map;
-}
+ListeNode::ListeNode(shared_ptr<Map> map) : map{map} {}
 
 
 void ListeNode::makeListNode()
@@ -20,21 +17,34 @@ void ListeNode::makeListNode()
 			auto east = map->getTileAtPosition(tile->getPosition() + sf::Vector2i{1, 0});
 			auto west = map->getTileAtPosition(tile->getPosition() + sf::Vector2i{-1, 0});
 			
-			auto southNode = listNode[south];
-			auto northNode = listNode[north];
-			auto eastNode = listNode[east];
-			auto westNode = listNode[west];
+			shared_ptr<Node> southNode;
+			shared_ptr<Node> northNode;
+			shared_ptr<Node> eastNode;
+			shared_ptr<Node> westNode;
 			
-			if (south->getTileType()->isWalkable() && southNode) {
+			if (south) {
+				southNode = listNode[south];
+			}
+			if (north) {
+				northNode = listNode[north];
+			}
+			if (east) {
+				eastNode = listNode[east];
+			}
+			if (west) {
+				westNode = listNode[west];
+			}
+			
+			if (south && south->getTileType()->isWalkable() && southNode) {
 				node->addConnectedNode(southNode);
 			}
-			if (north->getTileType()->isWalkable() && northNode) {
+			if (north && north->getTileType()->isWalkable() && northNode) {
 				node->addConnectedNode(northNode);
 			}
-			if (east->getTileType()->isWalkable() && eastNode) {
+			if (east && east->getTileType()->isWalkable() && eastNode) {
 				node->addConnectedNode(eastNode);
 			}
-			if (west->getTileType()->isWalkable() && westNode) {
+			if (west && west->getTileType()->isWalkable() && westNode) {
 				node->addConnectedNode(westNode);
 			}
 		}

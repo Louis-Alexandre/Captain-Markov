@@ -81,10 +81,10 @@ void Game::init()
 	auto mapPositionTile = make_shared<MapPositionTile>(map);
 	positionMatrix = make_shared<PositionMatrix>(observation, mapPositionTile);
 	
-	auto listeNode = make_shared<ListeNode>(map);
-	listeNode->makeListNode();
-	auto nodeFinding = make_shared<NodeFinding>(listeNode);
+	listeNode = make_shared<ListeNode>(map);
+	nodeFinding = make_shared<NodeFinding>(listeNode);
 	auto initNodeFinding = make_shared<InitNodeFinding>(positionMatrix, nodeFinding);
+	initNodeFinding->setControlledEntity(player2);
 	
 	turn.addRequiredEntity(arrowControlled);
 	turn.addEndTurnEvent(captainFoundPlayer);
@@ -334,6 +334,7 @@ void Game::reset()
 	
 	positionMatrix->setPie(pie);
 	positionMatrix->setTransition(transition);
+	listeNode->makeListNode();
 	
 	turn.reset();
 	observation->addEyeType(map->getTileSet()[4]);
