@@ -6,7 +6,7 @@ build/
 .* 
 Thumbs.db 
 *.pdn 
-!/.gitignore 
+!.gitignore 
 CMakeCache.txt 
 CMakeFiles/ 
 Makefile 
@@ -16,3 +16,4 @@ golem
 nbproject/ 
 *.orig
 data/
+!data/.empty
