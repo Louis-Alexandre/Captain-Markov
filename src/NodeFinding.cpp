@@ -35,10 +35,11 @@ void NodeFinding::doNodeFinding(shared_ptr<Node> node)
 		if (connectedNode) {
 			if(connectedNode->getDistance() > node->getDistance()){
 				connectedNode->setDistance(node->getDistance()+1);
+				//cout << "Reussit, ";
 			}
 			
 			if (!connectedNode->isMarquer()) {
-				connectedNode->isMarquer();
+				connectedNode->setMarquer(true);
 				doNodeFinding(connectedNode);
 			}
 		}

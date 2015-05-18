@@ -37,15 +37,20 @@ void ListeNode::makeListNode()
 			
 			if (south && south->getTileType()->isWalkable() && southNode) {
 				node->addConnectedNode(southNode);
+				southNode->addConnectedNode(node);
+				
 			}
 			if (north && north->getTileType()->isWalkable() && northNode) {
 				node->addConnectedNode(northNode);
+				northNode->addConnectedNode(node);
 			}
 			if (east && east->getTileType()->isWalkable() && eastNode) {
 				node->addConnectedNode(eastNode);
+				eastNode->addConnectedNode(node);
 			}
 			if (west && west->getTileType()->isWalkable() && westNode) {
 				node->addConnectedNode(westNode);
+				westNode->addConnectedNode(node);
 			}
 		}
 	}
