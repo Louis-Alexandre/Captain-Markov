@@ -11,14 +11,14 @@ void Map::generateMap()
 {
 	tiles.clear();
 	std::vector<int> map {
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
-		1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 4, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 4, 1,
-		1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 2,
-		1, 0, 4, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0,
-		2, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,
-		0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+		0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 5 , 5 , 5 , 1 ,
+		14, 1 , 0 , 1 , 5 , 5 , 5 , 5 , 1 , 0 , 0 , 0 , 0 , 0 , 0 , 6 ,
+		6 , 0 , 4 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 5 , 5 , 1 , 4 , 7 ,
+		6 , 0 , 1 , 5 , 5 , 1 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 4 , 0 , 2 ,
+		7 , 0 , 4 , 0 , 0 , 0 , 0 , 8 , 0 , 0 , 1 , 5 , 5 , 1 , 0 , 0 ,
+		2 , 0 , 13, 12, 0 , 8 , 0 , 6 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 8 ,
+		0 , 0 , 10, 11, 0 , 7 , 0 , 7 , 5 , 1 , 0 , 0 , 0 , 0 , 13, 6 ,
+		0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 10, 11
 	};
 
 	int width = 16;
@@ -50,31 +50,92 @@ void Map::generateTileset()
 	auto texture3 = make_shared<sf::Texture>();
 	auto texture4 = make_shared<sf::Texture>();
 	auto texture5 = make_shared<sf::Texture>();
+	auto texture6 = make_shared<sf::Texture>();
+	auto texture7 = make_shared<sf::Texture>();
+	auto texture8 = make_shared<sf::Texture>();
+	auto texture9 = make_shared<sf::Texture>();
+	auto texture10 = make_shared<sf::Texture>();
+	auto texture11 = make_shared<sf::Texture>();
+	auto texture12 = make_shared<sf::Texture>();
+	auto texture13 = make_shared<sf::Texture>();
+	auto texture14 = make_shared<sf::Texture>();
+	auto texture15 = make_shared<sf::Texture>();
 	texture1->loadFromFile("res/tileset.png", sf::IntRect{0, 0, 16, 16});
 	texture2->loadFromFile("res/tileset.png", sf::IntRect{16, 0, 16, 16});
-	texture3->loadFromFile("res/tileset.png", sf::IntRect{192, 0, 16, 16});
-	texture4->loadFromFile("res/tileset.png", sf::IntRect{208, 0, 16, 16});
-	texture5->loadFromFile("res/tileset.png", sf::IntRect{224, 0, 16, 16});
-	auto tileMur = make_shared<TileType>();
+	texture3->loadFromFile("res/tileset.png", sf::IntRect{32, 0, 16, 16});
+	texture4->loadFromFile("res/tileset.png", sf::IntRect{48, 0, 16, 16});
+	texture5->loadFromFile("res/tileset.png", sf::IntRect{64, 0, 16, 16});
+	texture6->loadFromFile("res/tileset.png", sf::IntRect{80, 0, 16, 16});
+	texture7->loadFromFile("res/tileset.png", sf::IntRect{96, 0, 16, 16});
+	texture8->loadFromFile("res/tileset.png", sf::IntRect{112, 0, 16, 16});
+	texture9->loadFromFile("res/tileset.png", sf::IntRect{128, 0, 16, 16});
+	texture10->loadFromFile("res/tileset.png", sf::IntRect{144, 0, 16, 16});
+	texture11->loadFromFile("res/tileset.png", sf::IntRect{160, 0, 16, 16});
+	texture12->loadFromFile("res/tileset.png", sf::IntRect{176, 0, 16, 16});
+	texture13->loadFromFile("res/tileset.png", sf::IntRect{192, 0, 16, 16});
+	texture14->loadFromFile("res/tileset.png", sf::IntRect{208, 0, 16, 16});
+	texture15->loadFromFile("res/tileset.png", sf::IntRect{224, 0, 16, 16});
+	auto tileMurLac = make_shared<TileType>();
+	auto tileMurHori = make_shared<TileType>();
+	auto tileMurVerti = make_shared<TileType>();
+	auto tileMurVertiEndDown = make_shared<TileType>();
+	auto tileMurVertiEndUp = make_shared<TileType>();
+	auto tileMurCornerDR = make_shared<TileType>();
+	auto tileMurBigLacDL = make_shared<TileType>();
+	auto tileMurBigLacDR = make_shared<TileType>();
+	auto tileMurBigLacUR = make_shared<TileType>();
+	auto tileMurBigLacUL = make_shared<TileType>();
+	auto tileMurCornerUR = make_shared<TileType>();
 	auto tileDefault = make_shared<TileType>();
 	auto tileGoal = make_shared<TileType>();
 	auto tileGoalChecked = make_shared<TileType>();
 	auto tileParrot = make_shared<TileType>();
 	tileDefault->setTexture(texture1);
 	tileDefault->setWalkable(true);
-	tileParrot->setTexture(texture5);
+	tileParrot->setTexture(texture15);
 	tileParrot->setWalkable(true);
-	tileMur->setTexture(texture2);
-	tileMur->setWalkable(false);
-	tileGoal->setTexture(texture3);
+	tileMurLac->setTexture(texture2);
+	tileMurLac->setWalkable(false);
+	tileMurHori->setTexture(texture3);
+	tileMurHori->setWalkable(false);
+	tileMurVerti->setTexture(texture4);
+	tileMurVerti->setWalkable(false);
+	tileMurVertiEndDown->setTexture(texture5);
+	tileMurVertiEndDown->setWalkable(false);
+	tileMurVertiEndUp->setTexture(texture6);
+	tileMurVertiEndUp->setWalkable(false);
+	tileMurCornerDR->setTexture(texture7);
+	tileMurCornerDR->setWalkable(false);
+	tileMurBigLacDL->setTexture(texture8);
+	tileMurBigLacDL->setWalkable(false);
+	tileMurBigLacDR->setTexture(texture9);
+	tileMurBigLacDR->setWalkable(false);
+	tileMurBigLacUR->setTexture(texture10);
+	tileMurBigLacUR->setWalkable(false);
+	tileMurBigLacUL->setTexture(texture11);
+	tileMurBigLacUL->setWalkable(false);
+	tileMurCornerUR->setTexture(texture12);
+	tileMurCornerUR->setWalkable(false);
+	tileGoal->setTexture(texture13);
 	tileGoal->setWalkable(true);
-	tileGoalChecked->setTexture(texture4);
+	tileGoalChecked->setTexture(texture14);
 	tileGoalChecked->setWalkable(true);
-	tileSet.push_back(tileDefault);
-	tileSet.push_back(tileMur);
-	tileSet.push_back(tileGoal);
-	tileSet.push_back(tileGoalChecked);
-	tileSet.push_back(tileParrot);
+	tileSet.push_back(tileDefault); //0
+	tileSet.push_back(tileMurLac); //1
+	tileSet.push_back(tileGoal); //2
+	tileSet.push_back(tileGoalChecked); //3
+	tileSet.push_back(tileParrot); //4
+	tileSet.push_back(tileMurHori); //5
+	tileSet.push_back(tileMurVerti); //6
+	tileSet.push_back(tileMurVertiEndDown); //7
+	tileSet.push_back(tileMurVertiEndUp); //8
+	tileSet.push_back(tileMurCornerDR); //9
+	tileSet.push_back(tileMurBigLacDL); //10
+	tileSet.push_back(tileMurBigLacDR); //11
+	tileSet.push_back(tileMurBigLacUR); //12
+	tileSet.push_back(tileMurBigLacUL); //13
+	tileSet.push_back(tileMurCornerUR); //14
+	
 
 }
 
