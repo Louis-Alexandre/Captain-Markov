@@ -15,4 +15,4 @@ compile_commands.json
 golem 
 nbproject/ 
 *.orig
-*.json
+data/
