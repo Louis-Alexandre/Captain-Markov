@@ -10,7 +10,7 @@ using namespace std;
 void SaveMatrix::trigger()
 {
 	if (observation->getObservations().size() > 4) {
-		ifstream inSave{"observations.json", ifstream::binary};
+		ifstream inSave{"data/observations.json", ifstream::binary};
 		Json::Value root;
 		
 		if (inSave) {
@@ -32,7 +32,7 @@ void SaveMatrix::trigger()
 		}
 		
 		root["games"].append(game);
-		ofstream outSave{"observations.json", ifstream::binary | ofstream::trunc};
+		ofstream outSave{"data/observations.json", ifstream::binary | ofstream::trunc};
 		
 		Json::FastWriter writer;
 		outSave << writer.write(root);

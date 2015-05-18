@@ -9,7 +9,7 @@ vector<vector<vector<int>>> MatrixLoader::getAll() const
 {
 	if (!loaded) {
 		vector<vector<vector<int>>> observations;
-		ifstream inSave{"observations.json", ifstream::binary};
+		ifstream inSave{"data/observations.json", ifstream::binary};
 		
 		Json::Value root;
 		

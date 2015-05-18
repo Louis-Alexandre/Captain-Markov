@@ -9,7 +9,6 @@
 #include "SaveMatrix.h"
 #include "observation.h"
 #include "concretemapinfo.h"
-#include "Entity/Player.h"
 #include "matrixprinter.h"
 #include "appendmatrixprovider.h"
 #include "matrixloader.h"
@@ -22,6 +21,8 @@
 #include "ListeNode.h"
 #include "NodeFinding.h"
 #include "initnodefinding.h"
+#include "distanceaccumulator.h"
+#include "distancepersistor.h"
 
 #include <iostream>
 #include <thread>
@@ -92,6 +93,9 @@ void Game::init()
 	turn.addPreApplyEvent(observation);
 	turn.addApplyEvent(initNodeFinding);
 	
+	auto distanceAccumulator = make_shared<DistanceAccumulator>(positionMatrix, player1);
+	auto distancePersistor = make_shared<DistancePersistor>(distanceAccumulator);
+	
 	window.setKeyRepeatEnabled(false);
 	
 	turn.addApplyEvent(make_shared<CallbackEvent>([=](){
@@ -99,11 +103,14 @@ void Game::init()
 		cout << positionMatrix->getPosition().x << ", " << positionMatrix->getPosition().y << endl;
 		showMat(ligne(positionMatrix->getProbability(), positionMatrix->getProbability().size1() -1));
 	}));
+	
+	turn.addEndTurnEvent(distanceAccumulator);
 
 	setLostGoal(captainFoundPlayer);
 	setWinGoal(treasureFound);
 	
 	addEndGameEvent(saveMatrix);
+	addEndGameEvent(distancePersistor);
 	
 	reset();
 }
@@ -390,7 +397,7 @@ void Game::render()
 			auto relative= tile->getPosition() - arrowControlled->getPosition();
 			auto distance = sqrt(relative.x*relative.x + relative.y*relative.y);
 			sf::RectangleShape fogRectangle(sf::Vector2f {static_cast<float>(mapInfo->getTileWidth()), static_cast<float>(mapInfo->getTileHeight())});
-			fogRectangle.setFillColor(sf::Color{0, 0, 0, static_cast<uint>((255.0/vision)*(max(vision*2/4, min(vision, distance))-(vision*2/4)))});
+			fogRectangle.setFillColor(sf::Color{0, 0, 0, static_cast<u_char>((255.0/vision)*(max(vision*2/4, min(vision, distance))-(vision*2/4)))});
 			fogRectangle.setPosition(tile->getPosition().x * mapInfo->getTileWidth(), tile->getPosition().y * mapInfo->getTileHeight());
 			window.draw(fogRectangle);
 		}
