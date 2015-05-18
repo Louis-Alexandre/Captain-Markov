@@ -48,6 +48,7 @@ public:
 	void addEndGameEvent(std::shared_ptr<Event> event);
 	
 private:
+	bool fogEnabled = true;
 	void keyChanged();
 	std::shared_ptr<AppendMatrixProvider> completeMatrixProvider;
 	std::shared_ptr<Observation> observation;

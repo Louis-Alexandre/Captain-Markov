@@ -151,6 +151,8 @@ void Game::handleEvent()
 		} else if (event.type == sf::Event::KeyReleased) {
 			if (event.key.code == sf::Keyboard::Escape) {
 				window.close();
+			} else if (event.key.code == sf::Keyboard::F) {
+				fogEnabled = !fogEnabled;
 			} else {
 				keyPressed[event.key.code] = false;
 			}
@@ -378,18 +380,20 @@ void Game::render()
 
 	for (auto entity : entities) {
 		auto distance = entity->getPosition() - arrowControlled->getPosition();
-		if (sqrt(distance.x*distance.x + distance.y*distance.y) < vision) {
+		if (!fogEnabled || sqrt(distance.x*distance.x + distance.y*distance.y) < vision) {
 			entity->draw(window, mapInfo.get());
 		}
 	}
 	
-	for (auto tile : map->getTiles()) {
-		auto relative= tile->getPosition() - arrowControlled->getPosition();
-		auto distance = sqrt(relative.x*relative.x + relative.y*relative.y);
-		sf::RectangleShape fogRectangle(sf::Vector2f {static_cast<float>(mapInfo->getTileWidth()), static_cast<float>(mapInfo->getTileHeight())});
-		fogRectangle.setFillColor(sf::Color{0, 0, 0, static_cast<uint>((255.0/vision)*(max(vision*2/4, min(vision, distance))-(vision*2/4)))});
-		fogRectangle.setPosition(tile->getPosition().x * mapInfo->getTileWidth(), tile->getPosition().y * mapInfo->getTileHeight());
-		window.draw(fogRectangle);
+	if (fogEnabled) {
+		for (auto tile : map->getTiles()) {
+			auto relative= tile->getPosition() - arrowControlled->getPosition();
+			auto distance = sqrt(relative.x*relative.x + relative.y*relative.y);
+			sf::RectangleShape fogRectangle(sf::Vector2f {static_cast<float>(mapInfo->getTileWidth()), static_cast<float>(mapInfo->getTileHeight())});
+			fogRectangle.setFillColor(sf::Color{0, 0, 0, static_cast<uint>((255.0/vision)*(max(vision*2/4, min(vision, distance))-(vision*2/4)))});
+			fogRectangle.setPosition(tile->getPosition().x * mapInfo->getTileWidth(), tile->getPosition().y * mapInfo->getTileHeight());
+			window.draw(fogRectangle);
+		}
 	}
 
 
