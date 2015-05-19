@@ -7,6 +7,7 @@ ListeNode::ListeNode(shared_ptr<Map> map) : map{map} {}
 
 void ListeNode::makeListNode()
 {
+	int i = 0;
 	for(auto tile: map->getTiles()){
 		if (tile->getTileType()->isWalkable()){
 			auto node = make_shared<Node>();
@@ -22,16 +23,23 @@ void ListeNode::makeListNode()
 			shared_ptr<Node> eastNode;
 			shared_ptr<Node> westNode;
 			
-			if (south) {
+			auto itSouth = listNode.find(south);
+			if (south && itSouth != listNode.end()) {
 				southNode = listNode[south];
 			}
-			if (north) {
+			
+			auto itNorth = listNode.find(north);
+			if (north && itNorth != listNode.end()) {
 				northNode = listNode[north];
 			}
-			if (east) {
+			
+			auto itEast = listNode.find(east);
+			if (east && itEast != listNode.end()) {
 				eastNode = listNode[east];
 			}
-			if (west) {
+			
+			auto itWest = listNode.find(west);
+			if (west && itWest != listNode.end()) {
 				westNode = listNode[west];
 			}
 			

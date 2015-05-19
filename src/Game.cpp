@@ -93,15 +93,16 @@ void Game::init()
 	turn.addPreApplyEvent(observation);
 	turn.addApplyEvent(initNodeFinding);
 	
-	auto distanceAccumulator = make_shared<DistanceAccumulator>(positionMatrix, player1);
+	auto distanceAccumulator = make_shared<DistanceAccumulator>(player1, nodeFinding);
 	auto distancePersistor = make_shared<DistancePersistor>(distanceAccumulator);
 	
 	window.setKeyRepeatEnabled(false);
 	
 	turn.addApplyEvent(make_shared<CallbackEvent>([=](){
-		positionMatrix->makeMatrix();
-		cout << positionMatrix->getPosition().x << ", " << positionMatrix->getPosition().y << endl;
+// 		positionMatrix->makeMatrix();
+// 		cout << positionMatrix->getPosition().y+1 << ", " << positionMatrix->getPosition().x+1 << endl;
 		showMat(ligne(positionMatrix->getProbability(), positionMatrix->getProbability().size1() -1));
+// 		showMat(ligne(observation->getMatrix(), observation->getMatrix().size1() -1));
 	}));
 	
 	turn.addEndTurnEvent(distanceAccumulator);
@@ -286,6 +287,7 @@ void Game::close()
 
 void Game::reset()
 {
+	fogEnabled = true;
 	for (auto entity : entities) {
 		entity->resetPosition();
 	}
@@ -342,11 +344,12 @@ void Game::reset()
 	transition = BW(completeMatrixProvider->getObservation(), mIni, pie, 20);
 	
 	positionMatrix->setPie(pie);
-	positionMatrix->setTransition(transition);
+	positionMatrix->setTransition(transition * 0.95 + mIni * 0.05);
 	listeNode->makeListNode();
 	
 	turn.reset();
 	observation->addEyeType(map->getTileSet()[4]);
+	observation->addEyeType(map->getTileSet()[3]);
 	observation->reset();
 	observation->trigger();
 }
@@ -364,6 +367,7 @@ void Game::win()
 	observation->replaceLast(last);
 	end();
 	cout << "You win!" << endl;
+	fogEnabled = false;
 	render();
 	this_thread::sleep_for(chrono::seconds(1));
 	reset();

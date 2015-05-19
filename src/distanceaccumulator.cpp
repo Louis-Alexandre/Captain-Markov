@@ -1,14 +1,13 @@
 #include "distanceaccumulator.h"
 
-#include "positionmatrix.h"
+#include "NodeFinding.h"
 #include "Entity/Entity.h"
 
-DistanceAccumulator::DistanceAccumulator(std::shared_ptr<PositionMatrix> _positionMatrix, std::shared_ptr<Entity> _target) : positionMatrix{_positionMatrix}, target{_target} {}
+DistanceAccumulator::DistanceAccumulator(std::shared_ptr<Entity> _target, std::shared_ptr<NodeFinding> _nodeFinding) : nodeFinding{_nodeFinding}, target{_target} {}
 
 void DistanceAccumulator::trigger()
 {
-	auto relative = positionMatrix->getPosition() - target->getPosition();
-	distances.emplace_back(sqrt(relative.x*relative.x + relative.y*relative.y));
+	distances.emplace_back(nodeFinding->getDistance(target->getPosition()));
 }
 
 std::vector<double> DistanceAccumulator::getDistances() const

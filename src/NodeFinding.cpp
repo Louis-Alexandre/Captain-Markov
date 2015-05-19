@@ -15,28 +15,30 @@ NodeFinding::NodeFinding(shared_ptr<ListeNode> _listeNode) : listeNode{_listeNod
 
 void NodeFinding::initiateNodeFinding(sf::Vector2i position)
 {
-	
 	shared_ptr<Node> goal;
 		for (auto node : listeNode->getListNode()) {
-			if (node.second) {
-				node.second->reset();
-				if(node.first->getPosition() == position){
-					node.second->setGoal(true);
-					goal = node.second;
-					goal->setDistance(0);
-					goal->setMarquer(true);
-				}
+			node.second->reset();
+			if(node.first->getPosition() == position){
+				node.second->setGoal(true);
+				goal = node.second;
+				goal->setDistance(0);
+				goal->setMarquer(true);
 			}
 		}
 		doNodeFinding(goal);
+		for (auto node : listeNode->getListNode()) {
+			if(!node.second->isMarquer()){
+// 				cout << "erreur a la position x: " << node.first->getPosition().x << " et y: " << node.first->getPosition().y << endl;
+			}
+		}
 }
-
 void NodeFinding::doNodeFinding(shared_ptr<Node> node)
 {
 	for (auto connectedNode : node->getConnectedNodes()){
 		if (connectedNode) {
-			if(connectedNode->getDistance() > node->getDistance()){
+			if(connectedNode->getDistance() > node->getDistance()+1){
 				connectedNode->setDistance(node->getDistance()+1);
+				doNodeFinding(connectedNode);
 			}
 			
 			if (!connectedNode->isMarquer()) {
@@ -47,27 +49,32 @@ void NodeFinding::doNodeFinding(shared_ptr<Node> node)
 	}
 }
 
+int NodeFinding::getDistance(sf::Vector2i position)
+{
+	for (auto node : listeNode->getListNode()) {
+		if (node.first->getPosition() == position) {
+			return node.second->getDistance();
+		}
+	}
+}
+
 sf::Vector2i NodeFinding::findBestMove(sf::Vector2i position)
 {
 	shared_ptr<Node> currentPosition;
 	shared_ptr<Node> nextPosition;
+	
 	for (auto node : listeNode->getListNode()) {
-		if (node.first) {
-			if(node.first->getPosition() == position){
-				if (node.second) {
-					for (auto connectedNode : node.second->getConnectedNodes()){
-						if (!nextPosition || connectedNode->getDistance() < nextPosition->getDistance()){
-							nextPosition = connectedNode;
-						}
-					}
+		if(node.first->getPosition() == position){
+			for (auto connectedNode : node.second->getConnectedNodes()){
+				if (!nextPosition || connectedNode->getDistance() < nextPosition->getDistance()){
+					nextPosition = connectedNode;
 				}
 			}
 		}
-
 	}
-	cout << endl;
+	
 	for (auto node : listeNode->getListNode()) {
-		if(node.second && node.first && node.second == nextPosition){
+		if(node.second == nextPosition){
 			return node.first->getPosition();
 		}
 	}

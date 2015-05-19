@@ -22,7 +22,7 @@ void Observation::trigger()
 				if (eyeType) {
 					turn.push_back(
 						observe->getNextPosition() == tile->getPosition()
-					);	
+					);
 				} else {
 					turn.push_back(
 						((abs(distance.x) > 1 || abs(distance.y) > 1) && !seen) || (seen && observe->getNextPosition() == tile->getPosition())
