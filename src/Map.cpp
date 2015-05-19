@@ -11,13 +11,13 @@ void Map::generateMap()
 {
 	tiles.clear();
 	std::vector<int> map {
-		0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 5 , 5 , 5 , 1 ,
-		14, 1 , 0 , 1 , 5 , 5 , 5 , 5 , 1 , 0 , 0 , 0 , 0 , 0 , 0 , 6 ,
-		6 , 0 , 4 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 5 , 5 , 1 , 4 , 7 ,
-		6 , 0 , 1 , 5 , 5 , 1 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 4 , 0 , 2 ,
+		0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 15, 5 , 5 , 5 , 20,
+		14, 16, 0 , 15, 5 , 5 , 5 , 5 , 16, 0 , 0 , 0 , 0 , 0 , 0 , 6 ,
+		6 , 0 , 4 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 15, 5 , 5 , 16, 4 , 7 ,
+		6 , 0 , 15, 5 , 5 , 16, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 4 , 0 , 2 ,
 		7 , 0 , 4 , 0 , 0 , 0 , 0 , 8 , 0 , 0 , 1 , 5 , 5 , 1 , 0 , 0 ,
 		2 , 0 , 13, 12, 0 , 8 , 0 , 6 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 8 ,
-		0 , 0 , 10, 11, 0 , 7 , 0 , 7 , 5 , 1 , 0 , 0 , 0 , 0 , 13, 6 ,
+		0 , 0 , 10, 11, 0 , 7 , 0 , 19, 5 , 16, 0 , 0 , 0 , 0 , 13, 18,
 		0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 10, 11
 	};
 
@@ -60,6 +60,12 @@ void Map::generateTileset()
 	auto texture13 = make_shared<sf::Texture>();
 	auto texture14 = make_shared<sf::Texture>();
 	auto texture15 = make_shared<sf::Texture>();
+	auto texture16 = make_shared<sf::Texture>();
+	auto texture17 = make_shared<sf::Texture>();
+	auto texture18 = make_shared<sf::Texture>();
+	auto texture19 = make_shared<sf::Texture>();
+	auto texture20 = make_shared<sf::Texture>();
+	auto texture21 = make_shared<sf::Texture>();
 	texture1->loadFromFile("res/tileset.png", sf::IntRect{0, 0, 16, 16});
 	texture2->loadFromFile("res/tileset.png", sf::IntRect{16, 0, 16, 16});
 	texture3->loadFromFile("res/tileset.png", sf::IntRect{32, 0, 16, 16});
@@ -75,6 +81,12 @@ void Map::generateTileset()
 	texture13->loadFromFile("res/tileset.png", sf::IntRect{192, 0, 16, 16});
 	texture14->loadFromFile("res/tileset.png", sf::IntRect{208, 0, 16, 16});
 	texture15->loadFromFile("res/tileset.png", sf::IntRect{224, 0, 16, 16});
+	texture16->loadFromFile("res/tileset.png", sf::IntRect{240, 0, 16, 16});
+	texture17->loadFromFile("res/tileset.png", sf::IntRect{256, 0, 16, 16});
+	texture18->loadFromFile("res/tileset.png", sf::IntRect{272, 0, 16, 16});
+	texture19->loadFromFile("res/tileset.png", sf::IntRect{288, 0, 16, 16});
+	texture20->loadFromFile("res/tileset.png", sf::IntRect{304, 0, 16, 16});
+	texture21->loadFromFile("res/tileset.png", sf::IntRect{320, 0, 16, 16});
 	auto tileMurLac = make_shared<TileType>();
 	auto tileMurHori = make_shared<TileType>();
 	auto tileMurVerti = make_shared<TileType>();
@@ -86,6 +98,12 @@ void Map::generateTileset()
 	auto tileMurBigLacUR = make_shared<TileType>();
 	auto tileMurBigLacUL = make_shared<TileType>();
 	auto tileMurCornerUR = make_shared<TileType>();
+	auto tileMurCornerHoriEndLeft = make_shared<TileType>();
+	auto tileMurCornerHoriEndRight = make_shared<TileType>();
+	auto tileMurAllWater = make_shared<TileType>();
+	auto tileMurCoterRight = make_shared<TileType>();
+	auto tileMurCornerDL = make_shared<TileType>();
+	auto tileMurCornerUL = make_shared<TileType>();
 	auto tileDefault = make_shared<TileType>();
 	auto tileGoal = make_shared<TileType>();
 	auto tileGoalChecked = make_shared<TileType>();
@@ -116,6 +134,18 @@ void Map::generateTileset()
 	tileMurBigLacUL->setWalkable(false);
 	tileMurCornerUR->setTexture(texture12);
 	tileMurCornerUR->setWalkable(false);
+	tileMurCornerHoriEndLeft->setTexture(texture16);
+	tileMurCornerHoriEndLeft->setWalkable(false);
+	tileMurCornerHoriEndRight->setTexture(texture17);
+	tileMurCornerHoriEndRight->setWalkable(false);
+	tileMurAllWater->setTexture(texture18);
+	tileMurAllWater->setWalkable(false);
+	tileMurCoterRight->setTexture(texture19);
+	tileMurCoterRight->setWalkable(false);
+	tileMurCornerDL->setTexture(texture20);
+	tileMurCornerDL->setWalkable(false);
+	tileMurCornerUL->setTexture(texture21);
+	tileMurCornerUL->setWalkable(false);
 	tileGoal->setTexture(texture13);
 	tileGoal->setWalkable(true);
 	tileGoalChecked->setTexture(texture14);
@@ -135,6 +165,12 @@ void Map::generateTileset()
 	tileSet.push_back(tileMurBigLacUR); //12
 	tileSet.push_back(tileMurBigLacUL); //13
 	tileSet.push_back(tileMurCornerUR); //14
+	tileSet.push_back(tileMurCornerHoriEndLeft); //15
+	tileSet.push_back(tileMurCornerHoriEndRight); //16
+	tileSet.push_back(tileMurAllWater); //17
+	tileSet.push_back(tileMurCoterRight); //18
+	tileSet.push_back(tileMurCornerDL); //19
+	tileSet.push_back(tileMurCornerUL); //20
 	
 
 }

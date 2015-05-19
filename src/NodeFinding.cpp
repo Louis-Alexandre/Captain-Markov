@@ -15,6 +15,7 @@ NodeFinding::NodeFinding(shared_ptr<ListeNode> _listeNode) : listeNode{_listeNod
 
 void NodeFinding::initiateNodeFinding(sf::Vector2i position)
 {
+	
 	shared_ptr<Node> goal;
 		for (auto node : listeNode->getListNode()) {
 			if (node.second) {
@@ -23,6 +24,7 @@ void NodeFinding::initiateNodeFinding(sf::Vector2i position)
 					node.second->setGoal(true);
 					goal = node.second;
 					goal->setDistance(0);
+					goal->setMarquer(true);
 				}
 			}
 		}

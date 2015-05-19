@@ -61,3 +61,8 @@ map<shared_ptr<Tile>, std::shared_ptr<Node>> ListeNode::getListNode()
 	return listNode;
 }
 
+void ListeNode::assignProb(std::shared_ptr< PositionMatrix > positionMatrix)
+{
+	
+}
+

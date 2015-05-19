@@ -2,6 +2,7 @@
 
 #include "Node.h"
 #include "Tile.h"
+#include "positionmatrix.h"
 
 #include <map>
 #include <memory>
@@ -15,6 +16,7 @@ class ListeNode
 public:
 	ListeNode(std::shared_ptr<Map>);
 	void makeListNode();
+	void assignProb(std::shared_ptr<PositionMatrix> positionMatrix);
 	std::map<std::shared_ptr<Tile>, std::shared_ptr<Node>> getListNode();
 	
 private:
