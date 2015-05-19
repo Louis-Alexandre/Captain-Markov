@@ -273,6 +273,15 @@ void Game::end()
 
 void Game::lost()
 {
+	vector<double> last;
+
+	for (auto tile : map->getTiles()) {
+		if (tile->getTileType()->isWalkable()) {
+			last.push_back(arrowControlled->getPosition() == tile->getPosition());
+		}
+	}
+	
+	observation->replaceLast(last);
 	end();
 	cout << "You lost!" << endl;
 	render();
