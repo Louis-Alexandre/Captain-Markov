@@ -16,20 +16,19 @@ NodeFinding::NodeFinding(shared_ptr<ListeNode> _listeNode) : listeNode{_listeNod
 void NodeFinding::initiateNodeFinding(sf::Vector2i position)
 {
 	shared_ptr<Node> goal;
-		for (auto node : listeNode->getListNode()) {
-			node.second->reset();
-			if(node.first->getPosition() == position){
-				node.second->setGoal(true);
-				goal = node.second;
-				goal->setDistance(0);
-				goal->setMarquer(true);
-			}
+	for (auto node : listeNode->getListNode()) {
+		node.second->reset();
+		if(node.first->getPosition() == position){
+			goal = node.second;
+			goal->setDistance(0);
 		}
+	}
+	if (goal) {
 		doNodeFinding(goal);
+	}
 }
 void NodeFinding::doNodeFinding(shared_ptr<Node> node)
 {
-	node->setMarquer(true);
 	for (auto connectedNode : node->getConnectedNodes()){
 		if (connectedNode) {
 			if(connectedNode->getDistance() > node->getDistance()+1){
