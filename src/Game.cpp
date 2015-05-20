@@ -105,7 +105,7 @@ void Game::init()
 // 		showMat(ligne(observation->getMatrix(), observation->getMatrix().size1() -1));
 	}));
 	
-	turn.addEndTurnEvent(distanceAccumulator);
+	turn.addPreApplyEvent(distanceAccumulator);
 
 	setLostGoal(captainFoundPlayer);
 	setWinGoal(treasureFound);

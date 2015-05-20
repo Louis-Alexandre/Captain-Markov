@@ -26,23 +26,14 @@ void NodeFinding::initiateNodeFinding(sf::Vector2i position)
 			}
 		}
 		doNodeFinding(goal);
-		for (auto node : listeNode->getListNode()) {
-			if(!node.second->isMarquer()){
-// 				cout << "erreur a la position x: " << node.first->getPosition().x << " et y: " << node.first->getPosition().y << endl;
-			}
-		}
 }
 void NodeFinding::doNodeFinding(shared_ptr<Node> node)
 {
+	node->setMarquer(true);
 	for (auto connectedNode : node->getConnectedNodes()){
 		if (connectedNode) {
 			if(connectedNode->getDistance() > node->getDistance()+1){
 				connectedNode->setDistance(node->getDistance()+1);
-				doNodeFinding(connectedNode);
-			}
-			
-			if (!connectedNode->isMarquer()) {
-				connectedNode->setMarquer(true);
 				doNodeFinding(connectedNode);
 			}
 		}

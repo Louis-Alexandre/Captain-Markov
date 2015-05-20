@@ -7,7 +7,7 @@ ListeNode::ListeNode(shared_ptr<Map> map) : map{map} {}
 
 void ListeNode::makeListNode()
 {
-	int i = 0;
+	listNode.clear();
 	for(auto tile: map->getTiles()){
 		if (tile->getTileType()->isWalkable()){
 			auto node = make_shared<Node>();
