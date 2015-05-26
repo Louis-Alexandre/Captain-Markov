@@ -100,7 +100,7 @@ void Game::init()
 	
 	turn.addApplyEvent(make_shared<CallbackEvent>([=](){
 // 		positionMatrix->makeMatrix();
-// 		cout << positionMatrix->getPosition().y+1 << ", " << positionMatrix->getPosition().x+1 << endl;
+ 		cout << positionMatrix->getPosition().y+1 << ", " << positionMatrix->getPosition().x+1 << endl;
 		showMat(ligne(positionMatrix->getProbability(), positionMatrix->getProbability().size1() -1));
 // 		showMat(ligne(observation->getMatrix(), observation->getMatrix().size1() -1));
 	}));
@@ -350,10 +350,11 @@ void Game::reset()
 	
 	matrix<double> transition;
 	
-	transition = BW(completeMatrixProvider->getObservation(), mIni, pie, 20);
+	transition = BW(completeMatrixProvider->getObservation(), mIni, pie, 15);
 	
 	positionMatrix->setPie(pie);
-	positionMatrix->setTransition(transition * 0.95 + mIni * 0.05);
+ 	positionMatrix->setTransition(transition * 0.95 + mIni * 0.05);
+//  	positionMatrix->setTransition(transition);
 	listeNode->makeListNode();
 	
 	turn.reset();
