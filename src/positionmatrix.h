@@ -7,6 +7,7 @@
 
 class Observation;
 class MapPositionTile;
+class Tile;
 
 class PositionMatrix
 {
@@ -15,6 +16,7 @@ public:
 	
 	sf::Vector2i getPosition() const;
 	boost::numeric::ublas::matrix<double> getProbability() const;
+	double getProbability(std::shared_ptr<Tile> tile) const;
 	
 	void makeMatrix();
 	

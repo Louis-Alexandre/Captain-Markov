@@ -11,17 +11,7 @@ int Node::getDistance() const
 
 void Node::setDistance(int distance)
 {
- this->distance = distance;
-}
-
-void Node::setDistanceProbable(double distanceProbable)
-{
-	this->distanceProbable = distanceProbable;
-}
-
-double Node::getDistanceProbable() const
-{
-	return distanceProbable;
+	this->distance = distance;
 }
 
 void Node::addConnectedNode(shared_ptr<Node> node)
@@ -49,5 +39,23 @@ set<shared_ptr<Node>> Node::getConnectedNodes() const
 void Node::reset()
 {
 	distance = numeric_limits<int>::max();
-	distanceProbable = 0;
+}
+
+double Node::getWeight() const
+{
+	return weight;
+}
+
+void Node::setWeight(double weight)
+{
+	this->weight = weight;
+}
+
+double Node::surroundingProbability() const
+{
+	double totalWeight = weight;
+	for (auto node : connectedNodes) {
+		totalWeight += node.expired() ? 0 : node.lock()->getWeight();
+	}
+	return totalWeight;
 }

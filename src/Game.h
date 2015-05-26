@@ -12,6 +12,7 @@ class Goal;
 class Map;
 class Entity;
 class CollisionHandler;
+class MapPositionTile;
 class Event;
 class TreasureFound;
 class Observation;
@@ -19,6 +20,7 @@ class AppendMatrixProvider;
 class NodeFinding;
 class ListeNode;
 class PositionMatrix;
+class Tile;
 
 class Game
 {
@@ -48,6 +50,7 @@ public:
 	void addEndGameEvent(std::shared_ptr<Event> event);
 	
 private:
+	std::vector<std::shared_ptr<Tile>> mappedTiles;
 	sf::Texture textureWin;
 	sf::Texture textureLost;
 	bool fogEnabled = true;
@@ -60,6 +63,7 @@ private:
 	std::set<std::shared_ptr<Event>> frameEvents;
 	std::set<std::shared_ptr<Event>> endGameEvent;
 	
+	std::shared_ptr<MapPositionTile> mapPositionTile;
 	std::shared_ptr<CollisionHandler> collisionHandler;
 	std::shared_ptr<Map> map;
 	std::shared_ptr<Entity> wasdControlled;

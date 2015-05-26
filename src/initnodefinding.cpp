@@ -17,7 +17,7 @@ void InitNodeFinding::trigger()
 {
 	positionMatrix->makeMatrix();
 	cout << positionMatrix->getPosition().y +1 << ", " << positionMatrix->getPosition().x +1 << endl;
-	nodeFinding->initiateNodeFinding(positionMatrix->getPosition());
+	nodeFinding->initiateNodeFinding(positionMatrix);
 	controlledPlayer->setNextPosition(nodeFinding->findBestMove(controlledPlayer->getPosition()));
 // 	cout << "nextPositionX: " << nodeFinding->findBestMove(controlledPlayer->getPosition()).x;
 // 	cout << " ,nextPositionY: " << nodeFinding->findBestMove(controlledPlayer->getPosition()).y << endl;

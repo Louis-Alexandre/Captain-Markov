@@ -27,6 +27,12 @@ sf::Vector2i PositionMatrix::getPosition() const
 	return positionTile->getPosition(argMax);
 }
 
+double PositionMatrix::getProbability(shared_ptr< Tile > tile) const
+{
+	auto mat = ligne(position, position.size1()-1);
+	return mat(0, positionTile->getArg(tile));
+}
+
 boost::numeric::ublas::matrix< double > PositionMatrix::getProbability() const
 {
 	return position;

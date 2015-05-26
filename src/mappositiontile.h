@@ -13,9 +13,10 @@ class MapPositionTile
 public:
 	MapPositionTile(std::shared_ptr<Map> _map);
 	
-	sf::Vector2i getPosition(int arg);
-private:
+	sf::Vector2i getPosition(int arg) const;
+	int getArg(std::shared_ptr<Tile> tile) const;
 	void makeMap();
+private:
 	std::shared_ptr<Map> map;
 	std::vector<std::shared_ptr<Tile>> mappedTiles;
 };

@@ -79,7 +79,7 @@ void Game::init()
 	auto saveMatrix = make_shared<SaveMatrix>();
 	saveMatrix->setObservation(observation);
 	
-	auto mapPositionTile = make_shared<MapPositionTile>(map);
+	mapPositionTile = make_shared<MapPositionTile>(map);
 	positionMatrix = make_shared<PositionMatrix>(observation, mapPositionTile);
 	
 	listeNode = make_shared<ListeNode>(map);
@@ -301,15 +301,17 @@ void Game::close()
 
 void Game::reset()
 {
+	mappedTiles.clear();
+	
 	fogEnabled = true;
 	for (auto entity : entities) {
 		entity->resetPosition();
 	}
 	map->generateMap();
+	mapPositionTile->makeMap();
 
 	vector<double> pie;
 
-	vector<shared_ptr<Tile>> mappedTiles;
 	for (auto tile : map->getTiles()) {
 		if (tile->getTileType()->isWalkable()) {
 			pie.push_back(arrowControlled->getPosition() == tile->getPosition());
@@ -381,7 +383,6 @@ void Game::win()
 	
 	observation->replaceLast(last);
 	end();
-	cout << "You win!" << endl;
 	fogEnabled = false;
 	render();
 	textureWin.loadFromFile("res/win.png");

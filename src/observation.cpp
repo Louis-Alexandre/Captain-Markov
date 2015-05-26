@@ -90,7 +90,7 @@ bool Observation::seesPlayer() const
 		}
 	}
 	
-	return abs(distance.x) <= 1 && abs(distance.y) <= 1;
+	return abs(distance.x) <= 2 && abs(distance.y) <= 1;
 }
 
 bool Observation::isEyeTile(shared_ptr<Tile> tile) const
