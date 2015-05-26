@@ -48,6 +48,8 @@ public:
 	void addEndGameEvent(std::shared_ptr<Event> event);
 	
 private:
+	sf::Texture textureWin;
+	sf::Texture textureLost;
 	bool fogEnabled = true;
 	void keyChanged();
 	std::shared_ptr<AppendMatrixProvider> completeMatrixProvider;

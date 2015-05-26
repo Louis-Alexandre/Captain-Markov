@@ -283,8 +283,13 @@ void Game::lost()
 	
 	observation->replaceLast(last);
 	end();
-	cout << "You lost!" << endl;
 	render();
+	textureLost.loadFromFile("res/lost.png");
+	sf::RectangleShape rect(sf::Vector2f{256.f, 512.f});
+	rect.setPosition(sf::Vector2f{sf::Vector2u{window.getSize().x / 2, window.getSize().y / 2} - sf::Vector2u{128, 256}});
+	rect.setTexture(&textureLost);
+	window.draw(rect);
+	window.display();
 	this_thread::sleep_for(chrono::seconds(1));
 	reset();
 }
@@ -378,6 +383,12 @@ void Game::win()
 	cout << "You win!" << endl;
 	fogEnabled = false;
 	render();
+	textureWin.loadFromFile("res/win.png");
+	sf::RectangleShape rect(sf::Vector2f{256.f, 512.f});
+	rect.setPosition(sf::Vector2f{sf::Vector2u{window.getSize().x / 2, window.getSize().y / 2} - sf::Vector2u{128, 256}});
+	rect.setTexture(&textureWin);
+	window.draw(rect);
+	window.display();
 	this_thread::sleep_for(chrono::seconds(1));
 	reset();
 }
