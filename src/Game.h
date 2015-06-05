@@ -54,6 +54,7 @@ private:
 	sf::Texture textureWin;
 	sf::Texture textureLost;
 	bool fogEnabled = true;
+	bool probsEnabled = false;
 	void keyChanged();
 	std::shared_ptr<AppendMatrixProvider> completeMatrixProvider;
 	std::shared_ptr<Observation> observation;

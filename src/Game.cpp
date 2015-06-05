@@ -76,12 +76,14 @@ void Game::init()
 	auto matrixLoader = make_shared<MatrixLoader>();
 	completeMatrixProvider = make_shared<AppendMatrixProvider>(matrixLoader, observation);
 
-	auto saveMatrix = make_shared<SaveMatrix>();
-	saveMatrix->setObservation(observation);
+	auto saveMatrix = make_shared<SaveMatrix>("data/observations.json", "observations");
+	saveMatrix->setMatrix(observation);
+	auto saveProbs = make_shared<SaveMatrix>("data/probabilities.json", "probabilities");
 	
 	mapPositionTile = make_shared<MapPositionTile>(map);
 	positionMatrix = make_shared<PositionMatrix>(observation, mapPositionTile);
 	
+	saveProbs->setMatrix(positionMatrix);
 	listeNode = make_shared<ListeNode>(map);
 	nodeFinding = make_shared<NodeFinding>(listeNode);
 	auto initNodeFinding = make_shared<InitNodeFinding>(positionMatrix, nodeFinding);
@@ -93,7 +95,7 @@ void Game::init()
 	turn.addPreApplyEvent(observation);
 	turn.addApplyEvent(initNodeFinding);
 	
-	auto distanceAccumulator = make_shared<DistanceAccumulator>(player1, nodeFinding);
+	auto distanceAccumulator = make_shared<DistanceAccumulator>(player1, nodeFinding, observation);
 	auto distancePersistor = make_shared<DistancePersistor>(distanceAccumulator);
 	
 	window.setKeyRepeatEnabled(false);
@@ -105,12 +107,13 @@ void Game::init()
 // 		showMat(ligne(observation->getMatrix(), observation->getMatrix().size1() -1));
 	}));
 	
-	turn.addPreApplyEvent(distanceAccumulator);
+	turn.addEndTurnEvent(distanceAccumulator);
 
 	setLostGoal(captainFoundPlayer);
 	setWinGoal(treasureFound);
 	
 	addEndGameEvent(saveMatrix);
+	addEndGameEvent(saveProbs);
 	addEndGameEvent(distancePersistor);
 	
 	reset();
@@ -161,6 +164,8 @@ void Game::handleEvent()
 				window.close();
 			} else if (event.key.code == sf::Keyboard::F) {
 				fogEnabled = !fogEnabled;
+			} else if (event.key.code == sf::Keyboard::P) {
+				probsEnabled = !probsEnabled;
 			} else {
 				keyPressed[event.key.code] = false;
 			}
@@ -286,7 +291,7 @@ void Game::lost()
 	render();
 	textureLost.loadFromFile("res/lost.png");
 	sf::RectangleShape rect(sf::Vector2f{256.f, 512.f});
-	rect.setPosition(sf::Vector2f{sf::Vector2u{window.getSize().x / 2, window.getSize().y / 2} - sf::Vector2u{128, 256}});
+	rect.setPosition(sf::Vector2f{sf::Vector2u{64 * 16 / 2, 64 * 8 / 2} - sf::Vector2u{128, 256}});
 	rect.setTexture(&textureLost);
 	window.draw(rect);
 	window.display();
@@ -369,6 +374,7 @@ void Game::reset()
 	observation->addEyeType(map->getTileSet()[3]);
 	observation->reset();
 	observation->trigger();
+	positionMatrix->makeMatrix();
 }
 
 void Game::win()
@@ -381,13 +387,13 @@ void Game::win()
 		}
 	}
 	
-	observation->replaceLast(last);
+	observation->replaceFive(last);
 	end();
 	fogEnabled = false;
 	render();
 	textureWin.loadFromFile("res/win.png");
 	sf::RectangleShape rect(sf::Vector2f{256.f, 512.f});
-	rect.setPosition(sf::Vector2f{sf::Vector2u{window.getSize().x / 2, window.getSize().y / 2} - sf::Vector2u{128, 256}});
+	rect.setPosition(sf::Vector2f{sf::Vector2u{64 * 16 / 2, 64 * 8 / 2} - sf::Vector2u{128, 256}});
 	rect.setTexture(&textureWin);
 	window.draw(rect);
 	window.display();
@@ -428,7 +434,31 @@ void Game::render()
 			window.draw(fogRectangle);
 		}
 	}
-
+	
+	if (probsEnabled) {
+		auto probs = ligne(positionMatrix->getProbability(), positionMatrix->getProbability().size1() -1);
+		if (probs.size2() == 0) {
+			positionMatrix->makeMatrix();
+			probs = ligne(positionMatrix->getProbability(), positionMatrix->getProbability().size1() -1);
+		}
+		for (auto tile : map->getTiles()) {
+			if (tile->getTileType()->isWalkable()) {
+				auto prob = probs(0, mapPositionTile->getArg(tile));
+				
+				sf::RectangleShape probRectangle(sf::Vector2f {static_cast<float>(mapInfo->getTileWidth()), static_cast<float>(mapInfo->getTileHeight())});
+				probRectangle.setFillColor(sf::Color{
+					static_cast<u_char>(191*sqrt(prob) + 64),
+					static_cast<u_char>(255*sqrt(prob)),
+					static_cast<u_char>(255/(sqrt(prob)+1)),
+					static_cast<u_char>(64+64*sqrt(prob))
+				});
+				
+				probRectangle.setPosition(tile->getPosition().x * mapInfo->getTileWidth(), tile->getPosition().y * mapInfo->getTileHeight());
+				window.draw(probRectangle);
+				
+			}
+		}
+	}
 
 	window.display();
 }

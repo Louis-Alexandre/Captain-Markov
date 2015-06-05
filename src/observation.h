@@ -26,15 +26,17 @@ public:
 	std::vector<std::vector<double>> getObservations() const;
 	
     boost::numeric::ublas::matrix<double> getMatrix() const override;
+    std::vector<std::vector<double>> getVecVec() const override;
 	
 	void replaceLast(std::vector<double> observation);
-	void reset();
+	void replaceFive(std::vector<double> observation);
+	void reset() override;
 	
 	void setObserve(std::shared_ptr<Entity> observe);
 	void addEyeType(std::shared_ptr<TileType> type);
+	bool seesPlayer() const;
 	
 private:
-	bool seesPlayer() const;
 	bool isEyeTile(std::shared_ptr<Tile> tile) const;
 	std::set<std::shared_ptr<TileType>> eyeTypes;
 	std::vector<std::vector<double>> observations;
