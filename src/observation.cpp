@@ -126,7 +126,7 @@ void Observation::replaceLast(vector<double> observation)
 void Observation::replaceFive(vector<double> observation)
 {
 	auto it = observations.end();
-	for (advance(it, -5) ; it != observations.end() ; it++) {
+	for (advance(it, -6) ; it != observations.end() ; it++) {
 		*it = observation;
 	}
 }

@@ -16,7 +16,7 @@ void TreasureEvent::trigger()
 		auto tile = map->getTileAtPosition(_subject->getPosition());
 		if (tile->getTileType() == _treasureType && _lastPosition == _subject->getPosition()) {
 			_turnCount++;
-			if (_turnCount == 5) {
+			if (_turnCount == 6) {
 				tile->setTileType(_treasureCheckedType);
 				_turnCount = 0;
 				_lastPosition = {0, 0};

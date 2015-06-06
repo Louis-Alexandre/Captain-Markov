@@ -26,12 +26,12 @@ vector<matrix<double>> AppendMatrixProvider::getObservation() const
 	return result;
 }
 
-vector<matrix<double>> AppendMatrixProvider::getLast10() const
+vector<matrix<double>> AppendMatrixProvider::getLast(int n) const
 {
 	auto obs = getObservation();
-	if (obs.size() > 10) {
+	if (obs.size() > n) {
 		auto it = obs.end();
-		advance(it, -10);
+		advance(it, -n);
 		return vector<matrix<double>>(it, obs.end());
 	} else {
 		return obs;
