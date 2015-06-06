@@ -6,17 +6,11 @@
 using namespace std;
 using boost::numeric::ublas::matrix;
 
-AppendMatrixProvider::AppendMatrixProvider(shared_ptr<MatrixLoader> loader, shared_ptr<Observation> observation) :
-	loader{loader},
-	observation{observation}
-{
-	
-}
+AppendMatrixProvider::AppendMatrixProvider(shared_ptr<MatrixLoader> loader) : loader{loader} {}
 
 vector<matrix<double>> AppendMatrixProvider::getObservation() const
 {
 	auto previousGames = loader->getAll();
-	auto currentGame = observation->getObservations();
 	vector<matrix<double>> result;
 	
 	for (auto game : previousGames) {
@@ -30,5 +24,16 @@ vector<matrix<double>> AppendMatrixProvider::getObservation() const
 	}
 	
 	return result;
-	
+}
+
+vector<matrix<double>> AppendMatrixProvider::getLast10() const
+{
+	auto obs = getObservation();
+	if (obs.size() > 10) {
+		auto it = obs.end();
+		advance(it, -10);
+		return vector<matrix<double>>(it, obs.end());
+	} else {
+		return obs;
+	}
 }

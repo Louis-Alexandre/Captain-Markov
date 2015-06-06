@@ -5,11 +5,13 @@
 
 using namespace std;
 
+MatrixLoader::MatrixLoader(string _path, string _name) : path{_path}, name{_name} {}
+
 vector<vector<vector<int>>> MatrixLoader::getAll() const
 {
 	if (!loaded) {
 		vector<vector<vector<int>>> observations;
-		ifstream inSave{"data/observations.json", ifstream::binary};
+		ifstream inSave{path, ifstream::binary};
 		
 		Json::Value root;
 		
@@ -17,7 +19,7 @@ vector<vector<vector<int>>> MatrixLoader::getAll() const
 			inSave >> root;
 			for (auto game : root["games"]) {
 				vector<vector<int>> gameVec;
-				for (auto observation : game["observations"]) {
+				for (auto observation : game[name]) {
 					vector<int> observationVec;
 					for (auto result : observation) {
 						observationVec.push_back(result.asInt());

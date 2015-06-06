@@ -73,8 +73,8 @@ void Game::init()
 	observation->setSubject(wasdControlled);
 	observation->setObserve(arrowControlled);
 
-	auto matrixLoader = make_shared<MatrixLoader>();
-	completeMatrixProvider = make_shared<AppendMatrixProvider>(matrixLoader, observation);
+	auto matrixLoader = make_shared<MatrixLoader>("data/observations.json", "observations");
+	completeMatrixProvider = make_shared<AppendMatrixProvider>(matrixLoader);
 
 	auto saveMatrix = make_shared<SaveMatrix>("data/observations.json", "observations");
 	saveMatrix->setMatrix(observation);
@@ -362,11 +362,22 @@ void Game::reset()
 	
 	matrix<double> transition;
 	
-	transition = BW(completeMatrixProvider->getObservation(), mIni, pie, 15);
+	if (history.size1() == 0) {
+		auto historyMatrixLoader = make_shared<MatrixLoader>("data/history.json", "observations");
+		auto matProv = make_shared<AppendMatrixProvider>(historyMatrixLoader);
+		history = BW(matProv->getObservation(), mIni, pie, 30);
+	}
+	
+	transition = BW(completeMatrixProvider->getLast10(), mIni, pie, 15);
 	
 	positionMatrix->setPie(pie);
- 	positionMatrix->setTransition(transition * 0.95 + mIni * 0.05);
-//  	positionMatrix->setTransition(transition);
+	
+	if (history.size1() > 0) {
+		positionMatrix->setTransition(transition * 0.5 + history * 0.5);
+	} else {
+		positionMatrix->setTransition(transition * 0.95 + mIni * 0.05);
+	}
+	
 	listeNode->makeListNode();
 	
 	turn.reset();
@@ -450,7 +461,7 @@ void Game::render()
 					static_cast<u_char>(191*sqrt(prob) + 64),
 					static_cast<u_char>(255*sqrt(prob)),
 					static_cast<u_char>(255/(sqrt(prob)+1)),
-					static_cast<u_char>(64+64*sqrt(prob))
+					static_cast<u_char>(128+32*sqrt(prob))
 				});
 				
 				probRectangle.setPosition(tile->getPosition().x * mapInfo->getTileWidth(), tile->getPosition().y * mapInfo->getTileHeight());

@@ -12,11 +12,11 @@ class Observation;
 class AppendMatrixProvider : public ObservationProvider
 {
 public:
-	AppendMatrixProvider(std::shared_ptr<MatrixLoader> loader, std::shared_ptr<Observation> observation);
+	AppendMatrixProvider(std::shared_ptr<MatrixLoader> loader);
 	
     std::vector< boost::numeric::ublas::matrix< double > > getObservation() const override;
+	std::vector< boost::numeric::ublas::matrix< double > > getLast10() const;
 	
 private:
 	std::shared_ptr<MatrixLoader> loader;
-	std::shared_ptr<Observation> observation;
 };

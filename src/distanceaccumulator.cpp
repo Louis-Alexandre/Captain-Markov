@@ -4,7 +4,9 @@
 #include "Entity/Entity.h"
 #include "observation.h"
 
-DistanceAccumulator::DistanceAccumulator(std::shared_ptr<Entity> _target, std::shared_ptr<NodeFinding> _nodeFinding, std::shared_ptr<Observation> _observation) :
+using namespace std;
+
+DistanceAccumulator::DistanceAccumulator(shared_ptr<Entity> _target, shared_ptr<NodeFinding> _nodeFinding, shared_ptr<Observation> _observation) :
 	nodeFinding{_nodeFinding},
 	target{_target},
 	observation{_observation} {}
@@ -16,7 +18,7 @@ void DistanceAccumulator::trigger()
 	}
 }
 
-std::vector<double> DistanceAccumulator::getDistances() const
+vector<double> DistanceAccumulator::getDistances() const
 {
 	return distances;
 }

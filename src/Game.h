@@ -64,6 +64,8 @@ private:
 	std::set<std::shared_ptr<Event>> frameEvents;
 	std::set<std::shared_ptr<Event>> endGameEvent;
 	
+	boost::numeric::ublas::matrix<double> history;
+	
 	std::shared_ptr<MapPositionTile> mapPositionTile;
 	std::shared_ptr<CollisionHandler> collisionHandler;
 	std::shared_ptr<Map> map;
