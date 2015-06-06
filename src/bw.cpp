@@ -23,7 +23,8 @@ matrix<double> BW(std::vector<matrix<double>> C, matrix<double> Mini, std::vecto
 		const int m = C[0].size2();
 		const int nbTours = C.size(); // Nombre de parties joués
 		auto nouvMm = std::vector<matrix<double>>(nbTours, matrix<double>(m,m)); // Ce qui va stocker nos poids de transition pour chaque parties
-
+		cout << "Nb de Parties :" << nbTours << endl;
+		
 		for (int k=0 ; k < iter; ++k) {
 
 			matrix<double> nouvM = ( 0.999 * Mini + 0.001 * theRealMini ) ;
