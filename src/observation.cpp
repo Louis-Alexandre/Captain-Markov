@@ -108,6 +108,11 @@ bool Observation::isEyeTile(shared_ptr<Tile> tile) const
 	return false;
 }
 
+vector<vector<double>> Observation::getVecVec() const
+{
+	return getObservations();
+}
+
 void Observation::addEyeType(shared_ptr<TileType> type)
 {
 	eyeTypes.emplace(type);
@@ -116,6 +121,14 @@ void Observation::addEyeType(shared_ptr<TileType> type)
 void Observation::replaceLast(vector<double> observation)
 {
 	observations[observations.size() - 1] = move(observation);
+}
+
+void Observation::replaceFive(vector<double> observation)
+{
+	auto it = observations.end();
+	for (advance(it, -5) ; it != observations.end() ; it++) {
+		*it = observation;
+	}
 }
 
 void Observation::setObserve(shared_ptr< Entity > observe)

@@ -7,10 +7,12 @@
 
 using namespace std;
 
+SaveMatrix::SaveMatrix(string _path, string _name) : path{_path}, name{_name} {}
+
 void SaveMatrix::trigger()
 {
-	if (observation->getObservations().size() > 4) {
-		ifstream inSave{"data/observations.json", ifstream::binary};
+	if (matrix->getVecVec().size() > 4) {
+		ifstream inSave{path, ifstream::binary};
 		Json::Value root;
 		
 		if (inSave) {
@@ -20,32 +22,54 @@ void SaveMatrix::trigger()
 		}
 		
 		Json::Value game = Json::objectValue;
-		game["observations"] = Json::arrayValue;
+		game[name] = Json::arrayValue;
 		
-		for (auto turn : observation->getObservations()) {
+		for (auto turn : matrix->getVecVec()) {
 			Json::Value turnValue = Json::arrayValue;
 			
 			for (auto value : turn) {
 				turnValue.append(value);
 			}
-			game["observations"].append(turnValue);
+			game[name].append(turnValue);
 		}
 		
 		root["games"].append(game);
-		ofstream outSave{"data/observations.json", ifstream::binary | ofstream::trunc};
+		ofstream outSave{path, ifstream::binary | ofstream::trunc};
 		
 		Json::FastWriter writer;
 		outSave << writer.write(root);
 	}
-	observation->reset();
+	matrix->reset();
 }
 
-shared_ptr<Observation> SaveMatrix::getObservation() const
+shared_ptr<MatrixProvider> SaveMatrix::getMatrix() const
 {
-	return observation;
+	return matrix;
 }
 
-void SaveMatrix::setObservation(shared_ptr<Observation> observation)
+string SaveMatrix::getName()
 {
-	this->observation = observation;
+	return name;
 }
+
+string SaveMatrix::getPath()
+{
+	return path;
+}
+
+
+void SaveMatrix::setMatrix(shared_ptr<MatrixProvider> matrix)
+{
+	this->matrix = matrix;
+}
+
+void SaveMatrix::setName(string name)
+{
+	this->name = name;
+}
+
+void SaveMatrix::setPath(string path)
+{
+	this->path = path;
+}
+

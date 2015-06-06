@@ -8,6 +8,7 @@
 #include "mappositiontile.h"
 
 using namespace std;
+using boost::numeric::ublas::matrix;
 
 PositionMatrix::PositionMatrix(std::shared_ptr< Observation > observation, std::shared_ptr<MapPositionTile> positionTile) : observation{observation}, positionTile{positionTile}
 {
@@ -33,7 +34,7 @@ double PositionMatrix::getProbability(shared_ptr< Tile > tile) const
 	return mat(0, positionTile->getArg(tile));
 }
 
-boost::numeric::ublas::matrix< double > PositionMatrix::getProbability() const
+matrix<double> PositionMatrix::getProbability() const
 {
 	return position;
 }
@@ -43,7 +44,7 @@ void PositionMatrix::setPie(std::vector< double > pie)
 	this->pie = pie;
 }
 
-void PositionMatrix::setTransition(boost::numeric::ublas::matrix< double > transition)
+void PositionMatrix::setTransition(matrix<double> transition)
 {
 	this->transition = transition;
 }
@@ -51,4 +52,25 @@ void PositionMatrix::setTransition(boost::numeric::ublas::matrix< double > trans
 void PositionMatrix::makeMatrix()
 {
 	position = Position(observation->getMatrix(), transition, pie);
+}
+
+matrix<double> PositionMatrix::getMatrix() const
+{
+	return position;
+}
+
+vector<vector<double>> PositionMatrix::getVecVec() const
+{
+	vector<vector<double>> vec(position.size1(), vector<double>(position.size2()));
+	
+	forMat(position, [&](int n, int m){
+		vec[n][m] = position(n, m);
+	});
+	
+	return vec;
+}
+
+void PositionMatrix::reset()
+{
+
 }

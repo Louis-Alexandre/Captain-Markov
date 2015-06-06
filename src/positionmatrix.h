@@ -1,5 +1,7 @@
 #pragma once
 
+#include "matrixprovider.h"
+
 #include <memory>
 
 #include <boost/numeric/ublas/matrix.hpp>
@@ -9,7 +11,7 @@ class Observation;
 class MapPositionTile;
 class Tile;
 
-class PositionMatrix
+class PositionMatrix : public MatrixProvider
 {
 public:
 	PositionMatrix(std::shared_ptr<Observation> observation, std::shared_ptr<MapPositionTile> positionTile);
@@ -22,6 +24,10 @@ public:
 	
 	void setPie(std::vector<double> pie);
 	void setTransition(boost::numeric::ublas::matrix<double> transition);
+	
+    virtual boost::numeric::ublas::matrix<double> getMatrix() const;
+    virtual std::vector<std::vector<double>> getVecVec() const;
+    virtual void reset();
 	
 private:
 	std::shared_ptr<MapPositionTile> positionTile;
