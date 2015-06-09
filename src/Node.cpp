@@ -39,6 +39,7 @@ set<shared_ptr<Node>> Node::getConnectedNodes() const
 void Node::reset()
 {
 	distance = numeric_limits<int>::max();
+	weight = 0;
 }
 
 double Node::getWeight() const
@@ -55,7 +56,7 @@ double Node::surroundingProbability() const
 {
 	double totalWeight = weight;
 	for (auto node : connectedNodes) {
-		totalWeight += node.expired() ? 0 : node.lock()->getWeight();
+		totalWeight -= node.expired() ? 0 : node.lock()->getWeight();
 	}
 	return totalWeight;
 }
