@@ -17,3 +17,5 @@ nbproject/
 *.orig
 data/
 !data/.empty
+r/
+!r/.empty

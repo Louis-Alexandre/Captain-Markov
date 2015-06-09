@@ -96,12 +96,16 @@ void Turn::removeTurnEvent(shared_ptr<Event> event)
 
 void Turn::addPreApplyEvent(shared_ptr< Event > event)
 {
-	preApplyEvents.insert(event);
+	preApplyEvents.emplace_back(event);
 }
 
 void Turn::removePreApplyEvent(shared_ptr< Event > event)
 {
-	preApplyEvents.erase(event);
+	auto it = find(preApplyEvents.begin(), preApplyEvents.end(), event);
+	
+	if (it != preApplyEvents.end()) {
+		preApplyEvents.erase(it);
+	}
 }
 
 void Turn::addApplyEvent(shared_ptr<Event> event)

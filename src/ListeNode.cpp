@@ -16,54 +16,44 @@ void ListeNode::makeListNode()
 			auto node = make_shared<Node>(i);
 			listNode[tile] = node;
 			
-			auto south = map->getTileAtPosition(tile->getPosition() + sf::Vector2i{0, 1});
-			auto north = map->getTileAtPosition(tile->getPosition() + sf::Vector2i{0, -1});
-			auto east = map->getTileAtPosition(tile->getPosition() + sf::Vector2i{1, 0});
-			auto west = map->getTileAtPosition(tile->getPosition() + sf::Vector2i{-1, 0});
-			
-			shared_ptr<Node> southNode;
-			shared_ptr<Node> northNode;
-			shared_ptr<Node> eastNode;
-			shared_ptr<Node> westNode;
-			
-			auto itSouth = listNode.find(south);
-			if (south && itSouth != listNode.end()) {
-				southNode = listNode[south];
+			for (auto position : {sf::Vector2i{0, 1}, sf::Vector2i{0, -1}, sf::Vector2i{1, 0}, sf::Vector2i{-1, 0}}) {
+				auto tileNode = map->getTileAtPosition(tile->getPosition() + position);
+				setConnectedNode(node, tileNode);
 			}
 			
-			auto itNorth = listNode.find(north);
-			if (north && itNorth != listNode.end()) {
-				northNode = listNode[north];
-			}
-			
-			auto itEast = listNode.find(east);
-			if (east && itEast != listNode.end()) {
-				eastNode = listNode[east];
-			}
-			
-			auto itWest = listNode.find(west);
-			if (west && itWest != listNode.end()) {
-				westNode = listNode[west];
-			}
-			
-			if (south && south->getTileType()->isWalkable() && southNode) {
-				node->addConnectedNode(southNode);
-				southNode->addConnectedNode(node);
-				
-			}
-			if (north && north->getTileType()->isWalkable() && northNode) {
-				node->addConnectedNode(northNode);
-				northNode->addConnectedNode(node);
-			}
-			if (east && east->getTileType()->isWalkable() && eastNode) {
-				node->addConnectedNode(eastNode);
-				eastNode->addConnectedNode(node);
-			}
-			if (west && west->getTileType()->isWalkable() && westNode) {
-				node->addConnectedNode(westNode);
-				westNode->addConnectedNode(node);
+			for (auto position : {sf::Vector2i{1, 1}, sf::Vector2i{1, -1}, sf::Vector2i{-1, 1}, sf::Vector2i{-1, -1}}) {
+				auto tileNode = map->getTileAtPosition(tile->getPosition() + position);
+				setVisibleNode(node, tileNode);
 			}
 		}
+	}
+}
+
+void ListeNode::setConnectedNode(shared_ptr<Node> node, shared_ptr<Tile> tile)
+{
+	shared_ptr<Node> connectedNode;
+	auto itSouth = listNode.find(tile);
+	if (tile && itSouth != listNode.end()) {
+		connectedNode = listNode[tile];
+	}
+	
+	if (tile && tile->getTileType()->isWalkable() && connectedNode) {
+		node->addConnectedNode(connectedNode);
+		connectedNode->addConnectedNode(node);
+	}
+}
+
+void ListeNode::setVisibleNode(shared_ptr< Node > node, shared_ptr< Tile > tile)
+{
+	shared_ptr<Node> connectedNode;
+	auto itSouth = listNode.find(tile);
+	if (tile && itSouth != listNode.end()) {
+		connectedNode = listNode[tile];
+	}
+	
+	if (tile && tile->getTileType()->isWalkable() && connectedNode) {
+		node->addVisibleNode(connectedNode);
+		connectedNode->addVisibleNode(node);
 	}
 }
 

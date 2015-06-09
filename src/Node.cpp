@@ -38,6 +38,28 @@ set<shared_ptr<Node>> Node::getConnectedNodes() const
 	return nodes;
 }
 
+void Node::addVisibleNode(shared_ptr<Node> node)
+{
+	visibleNodes.emplace(node);
+}
+
+void Node::removeVisibleNode(shared_ptr<Node> node)
+{
+	visibleNodes.erase(node);
+}
+
+set<shared_ptr<Node>> Node::getVisibleNodes() const
+{
+	set<shared_ptr<Node>> nodes;
+	
+	for (auto node : visibleNodes) {
+		if (!node.expired()) {
+			nodes.emplace(node.lock());
+		}
+	}
+	return nodes;
+}
+
 void Node::reset()
 {
 	distance = numeric_limits<int>::max();
@@ -68,6 +90,9 @@ double Node::surroundingProbability() const
 {
 	double totalWeight = 0;
 	for (auto node : connectedNodes) {
+		totalWeight += node.expired() ? 0 : node.lock()->getWeight();
+	}
+	for (auto node : visibleNodes) {
 		totalWeight += node.expired() ? 0 : node.lock()->getWeight();
 	}
 	return totalWeight;

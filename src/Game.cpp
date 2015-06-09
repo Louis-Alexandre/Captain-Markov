@@ -23,6 +23,7 @@
 #include "initnodefinding.h"
 #include "distanceaccumulator.h"
 #include "distancepersistor.h"
+#include "rprinter.h"
 
 #include <iostream>
 #include <thread>
@@ -107,8 +108,11 @@ void Game::init()
 // // 		showMat(ligne(observation->getMatrix(), observation->getMatrix().size1() -1));
 // 	}));
 	
+	auto printR = make_shared<RPrinter>(positionMatrix, player1, player2, observation, completeMatrixProvider, map, mapPositionTile);
+	
 	turn.addEndTurnEvent(distanceAccumulator);
-
+	turn.addPreApplyEvent(printR);
+	
 	setLostGoal(captainFoundPlayer);
 	setWinGoal(treasureFound);
 	

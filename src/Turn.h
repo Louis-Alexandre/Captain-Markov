@@ -38,7 +38,7 @@ public:
 private:
 	void preApply();
 	std::set<std::shared_ptr<Event>> applyEvents;
-	std::set<std::shared_ptr<Event>> preApplyEvents;
+	std::vector<std::shared_ptr<Event>> preApplyEvents;
 	std::set<std::shared_ptr<Event>> endTurnEvents;
 	std::map<std::shared_ptr<Entity>, optionnal<sf::Vector2i>> listMove;
 	std::set<std::shared_ptr<Entity>> required;

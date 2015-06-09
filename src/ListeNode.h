@@ -20,6 +20,9 @@ public:
 	void assignProb(std::shared_ptr<PositionMatrix> positionMatrix);
 	std::map<std::shared_ptr<Tile>, std::shared_ptr<Node>> getListNode();
 	
+	void setConnectedNode( std::shared_ptr< Node > node, std::shared_ptr< Tile > tile );
+	void setVisibleNode( std::shared_ptr< Node > node, std::shared_ptr< Tile > tile );
+	
 private:
 	std::map<std::shared_ptr<Tile>, std::shared_ptr<Node>> listNode;
 	std::shared_ptr<Map> map;
