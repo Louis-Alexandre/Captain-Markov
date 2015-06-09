@@ -4,6 +4,8 @@
 
 using namespace std;
 
+Node::Node(int position) : position{position} {}
+
 int Node::getDistance() const
 {
 	return distance;
@@ -52,11 +54,21 @@ void Node::setWeight(double weight)
 	this->weight = weight;
 }
 
+int Node::getPosition() const
+{
+	return position;
+}
+
+void Node::setPosition(int n)
+{
+	position = n;
+}
+
 double Node::surroundingProbability() const
 {
-	double totalWeight = weight;
+	double totalWeight = 0;
 	for (auto node : connectedNodes) {
-		totalWeight -= node.expired() ? 0 : node.lock()->getWeight();
+		totalWeight += node.expired() ? 0 : node.lock()->getWeight();
 	}
 	return totalWeight;
 }

@@ -15,10 +15,13 @@ NodeFinding::NodeFinding(shared_ptr<ListeNode> _listeNode) : listeNode{_listeNod
 
 void NodeFinding::initiateNodeFinding(shared_ptr<PositionMatrix> position)
 {
+	int i = 0;
 	shared_ptr<Node> goal;
 	for (auto node : listeNode->getListNode()) {
 		node.second->reset();
-		position->getProbability(node.first);
+		i++;
+		node.second->setPosition(i);
+		node.second->setWeight(position->getProbability(node.first));
 		if(node.first->getPosition() == position->getPosition()){
 			goal = node.second;
 			goal->setDistance(0);
@@ -57,11 +60,19 @@ sf::Vector2i NodeFinding::findBestMove(sf::Vector2i position)
 	for (auto node : listeNode->getListNode()) {
 		if(node.first->getPosition() == position) {
 			for (auto connectedNode : node.second->getConnectedNodes()) {
-				if (
+				if ( connectedNode &&
 					(!nextPosition || connectedNode->getDistance() < nextPosition->getDistance()) ||
-					(connectedNode->getDistance() == nextPosition->getDistance() &&  nextPosition->surroundingProbability() < connectedNode->surroundingProbability())
+					(connectedNode->getDistance() == nextPosition->getDistance() &&  nextPosition->surroundingProbability() <= connectedNode->surroundingProbability())
 				) {
-					nextPosition = connectedNode;
+// 					if (nextPosition) {
+// 						if (nextPosition->surroundingProbability() < connectedNode->surroundingProbability()) {
+// 							nextPosition = connectedNode;
+// 						} else if (nextPosition->getPosition() < connectedNode->getPosition()) {
+// 							nextPosition = connectedNode;
+// 						}
+// 					} else {
+						nextPosition = connectedNode;
+// 					}
 				}
 			}
 		}

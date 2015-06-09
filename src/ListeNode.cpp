@@ -1,16 +1,19 @@
 #include "ListeNode.h"
 #include "Map.h"
+#include "mappositiontile.h"
 
 using namespace std;
-ListeNode::ListeNode(shared_ptr<Map> map) : map{map} {}
+ListeNode::ListeNode(shared_ptr<Map> map, shared_ptr<MapPositionTile> mpt) : map{map}, mpt{mpt} {}
 
 
 void ListeNode::makeListNode()
 {
+	int i = 0;
 	listNode.clear();
 	for(auto tile: map->getTiles()){
 		if (tile->getTileType()->isWalkable()){
-			auto node = make_shared<Node>();
+			i++;
+			auto node = make_shared<Node>(i);
 			listNode[tile] = node;
 			
 			auto south = map->getTileAtPosition(tile->getPosition() + sf::Vector2i{0, 1});

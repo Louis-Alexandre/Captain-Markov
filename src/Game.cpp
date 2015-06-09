@@ -84,7 +84,7 @@ void Game::init()
 	positionMatrix = make_shared<PositionMatrix>(observation, mapPositionTile);
 	
 	saveProbs->setMatrix(positionMatrix);
-	listeNode = make_shared<ListeNode>(map);
+	listeNode = make_shared<ListeNode>(map, mapPositionTile);
 	nodeFinding = make_shared<NodeFinding>(listeNode);
 	auto initNodeFinding = make_shared<InitNodeFinding>(positionMatrix, nodeFinding);
 	initNodeFinding->setControlledEntity(player2);

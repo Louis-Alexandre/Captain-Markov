@@ -9,6 +9,7 @@ class Tile;
 class Node
 {
 public:
+	Node(int position);
 	void setDistance(int distance);
 	int getDistance() const;
 	void addConnectedNode( std::shared_ptr< Node > node );
@@ -20,8 +21,10 @@ public:
 	double surroundingProbability() const;
 	
 	void reset();
-	
+	int getPosition() const;
+	void setPosition(int n);
 private:
+	int position = 0;
 	int distance = 0;
 	double weight = 0;
 	std::set<std::weak_ptr<Node>, std::owner_less<std::weak_ptr<Node>>> connectedNodes;
