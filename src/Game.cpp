@@ -100,12 +100,12 @@ void Game::init()
 	
 	window.setKeyRepeatEnabled(false);
 	
-// 	turn.addApplyEvent(make_shared<CallbackEvent>([=](){
+ 	turn.addApplyEvent(make_shared<CallbackEvent>([=](){
 // // 		positionMatrix->makeMatrix();
 // //  		cout << positionMatrix->getPosition().y+1 << ", " << positionMatrix->getPosition().x+1 << endl;
-// // 		showMat(ligne(positionMatrix->getProbability(), positionMatrix->getProbability().size1() -1));
-// // 		showMat(ligne(observation->getMatrix(), observation->getMatrix().size1() -1));
-// 	}));
+		showMat(ligne(positionMatrix->getProbability(), positionMatrix->getProbability().size1() -1));
+ 		showMat(ligne(observation->getMatrix(), observation->getMatrix().size1() -1));
+	}));
 	
 	turn.addEndTurnEvent(distanceAccumulator);
 
@@ -368,17 +368,26 @@ void Game::reset()
 		history = BW(matProv->getObservation(), mIni, pie, 30);
 	}
 	
-	transition = BW(completeMatrixProvider->getLast(15), mIni, pie, 15);
+	transition = BW(completeMatrixProvider->getLast(10), mIni, pie, 20);
 			cout << "Nb de Parties :" << completeMatrixProvider->getObservation().size() << endl;
 
 	positionMatrix->setPie(pie);
 	
 	if (history.size1() > 0) {
-		positionMatrix->setTransition(transition * 0.75 + history * 0.25);
+			positionMatrix->setTransition( history * 0.9995 + mIni * 0.0005);
+// 			positionMatrix->setTransition( mIni );
+// 		if (completeMatrixProvider->getObservation().size() == 00 ) {
+// 			positionMatrix->setTransition( history * 0.9995 + mIni * 0.0005);
+// 		} else if (completeMatrixProvider->getObservation().size() < 10 ){
+// 					positionMatrix->setTransition(transition * 0.08 * completeMatrixProvider->getObservation().size() + history * (1-  0.08 * completeMatrixProvider->getObservation().size() - 0.0005) + mIni * 0.0005);
+// 		} else {
+// 			positionMatrix->setTransition(transition * 0.7995 + history * 0.20 + mIni * 0.0005);
+// 		}
 	} else {
 		positionMatrix->setTransition(transition * 0.95 + mIni * 0.05);
 	}
 	
+
 	listeNode->makeListNode();
 	
 	turn.reset();
